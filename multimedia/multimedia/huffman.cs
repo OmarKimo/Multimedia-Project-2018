@@ -35,14 +35,14 @@ namespace multimedia
 
     class Huffman
     {
-        static private IList<Node> mylist;
-        public IList<Node> Getmylist() //get copy of list
+        static private IList<Node> huffmanlist;
+        public IList<Node> Gethuffman() //get copy of list
         {
             IList<Node> newlist = new List<Node>();
 
-            for (int i = 0; i < mylist.Count; i++)
+            for (int i = 0; i < huffmanlist.Count; i++)
             {
-                Node tempNode = mylist[i];
+                Node tempNode = huffmanlist[i];
                 newlist.Add(tempNode);
             } 
             return newlist;
@@ -50,7 +50,7 @@ namespace multimedia
         static void Main(string[] input, int[] array) //give them array of string & array of number of each string
         {
             IList<Node> list = new List<Node>();
-            IList<Node> mylist = new List<Node>();
+            IList<Node> huffmanlist = new List<Node>();
             for (int i = 0; i < array.Length; i++)
             {
                 list.Add(new Node(input[i], array[i]));
@@ -105,7 +105,7 @@ namespace multimedia
             else if (parentNode.leftChild == null)
             {
                 parentNode.code = code;
-                mylist.Add(parentNode);
+                huffmanlist.Add(parentNode);
             }
             else
             {
@@ -120,11 +120,11 @@ namespace multimedia
             string res = "";
             for (int i = 0; i < input.Length; i++)
             {
-                for (int j = 0; j < mylist.Count; j++)
+                for (int j = 0; j < huffmanlist.Count; j++)
                 {
-                    if (input[i] == mylist[j].data[0])
+                    if (input[i] == huffmanlist[j].data[0])
                     {
-                        res += mylist[j].code;
+                        res += huffmanlist[j].code;
                         break;
                     }
                 }
@@ -141,11 +141,11 @@ namespace multimedia
                 //add current code
                 curr += input[i];
                 //search on current code on the list 
-                for (int j = 0; j < mylist.Count; j++)
+                for (int j = 0; j < huffmanlist.Count; j++)
                 {
-                    if (curr == mylist[j].code) //if found then add data to result and search on the next symple 
+                    if (curr == huffmanlist[j].code) //if found then add data to result and search on the next symple 
                     {
-                        res += mylist[j].data;
+                        res += huffmanlist[j].data;
                         curr = "";
                         break;
                     }
@@ -167,5 +167,119 @@ namespace multimedia
             }
             return newlist;
         }
+    }
+
+    class letter
+    {
+        public Double upper;
+        public Double lower;
+        public string data;
+        public letter(string data,double up,double low)
+        {
+            this.data = data;
+            this.upper = up;
+            this.lower = low;
+
+        }
+    }
+
+    class arthmitc
+    {
+        static private IList<letter> arthmitclist;
+        static void Main(string[] input, int[] array) //give them array of string & array of number of each string
+        {
+            arthmitclist = new List<letter>();
+            long sum = 0;
+            for (int i = 0; i < array.Length; i++)
+            {
+                sum += array[i];
+            }
+            double curr = 0.0;
+            for (int i = 0; i < array.Length; i++)
+            {
+                arthmitclist.Add(new letter(input[i], curr / sum, (curr + array[i]) / sum));
+                curr += array[i];
+
+            }
+        }
+        public static IList<Double> codeData(string input) //given data ,output code
+        {
+            IList<Double> list = new List<Double>();
+            IList<letter> artlist = new List<letter>();
+            for (int i = 0; i < arthmitclist.Count; i++)
+            { 
+                artlist.Add(new letter(arthmitclist[i].data,arthmitclist[i].upper,arthmitclist[i].lower));
+            }
+            Double up=1, down=0;
+            string curr = "";
+            for (int i = 0; i < input.Length; i++)
+            {
+                curr += input[i];
+                for (int j = 0; j < artlist.Count; j++)
+                {
+                    if (artlist[j].data == curr)
+                    {
+                        up = artlist[j].upper;
+                        down = artlist[j].lower;
+                        Double ratio = up - down;
+                        for (int k = 0; k < arthmitclist.Count; k++)
+                        {
+                            artlist[j].lower = artlist[j].lower * ratio + down;
+                            artlist[j].upper = artlist[j].upper*ratio+down;
+                        }
+                        if (j == arthmitclist.Count - 1) //end of coding  need to change
+                        {
+                            list.Add((up + down) / 2.0);
+                            curr = "";
+                            up = 1;
+                            down = 0;
+                            artlist.Clear();
+                            for (int k = 0; k < arthmitclist.Count; k++)
+                            {
+                                artlist.Add(new letter(arthmitclist[k].data, arthmitclist[k].upper, arthmitclist[k].lower));
+                            }
+                        }
+                    }
+                }
+            }
+            return list;
+        }
+
+        public static string decodeData(Double input) //given double ,output data  for each double
+        {
+            string res = "";
+            IList<letter> artlist = new List<letter>();
+            for (int i = 0; i < arthmitclist.Count; i++)
+            {
+                artlist.Add(new letter(arthmitclist[i].data, arthmitclist[i].upper, arthmitclist[i].lower));
+            }
+  
+            while(true)
+            {
+
+                for (int j = 0; j < artlist.Count; j++)
+                {
+                    if (input < arthmitclist[j].upper && input > arthmitclist[j].lower)
+                    {
+                        res += arthmitclist[j].data;
+                        Double up = artlist[j].upper;
+                        Double down = artlist[j].lower;
+                        Double ratio = up - down;
+                        for (int k = 0; k < arthmitclist.Count; k++)
+                        {
+                            artlist[j].lower = artlist[j].lower * ratio + down;
+                            artlist[j].upper = artlist[j].upper * ratio + down;
+                        }
+                        if (j == arthmitclist.Count - 1) //end of coding  need to change 
+                        {
+                            return res;
+                        }
+                    }
+                }
+            }
+        }
+
+
+
     }
 }
