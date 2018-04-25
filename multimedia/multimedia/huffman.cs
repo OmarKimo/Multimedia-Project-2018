@@ -154,18 +154,18 @@ namespace multimedia
             return res;
         }
 
-        public static IList<Node> extendhuffman(IList<Node> list)//extend huffman code 
+        public static void extendhuffman()//extend huffman code 
         {
             IList<Node> newlist = new List<Node>();
-
-            for (int i = 0; i < list.Count; i++)
+            for (int i = 0; i < huffmanlist.Count; i++)
             {
-                for (int j = i; j < list.Count; j++)
+                for (int j = i; j < huffmanlist.Count; j++)
                 {
-                    newlist.Add(new Node(list[i].data+list[j].data,list[i].number*list[j].number));
+                    newlist.Add(new Node(huffmanlist[i].data + huffmanlist[j].data, huffmanlist[i].number * huffmanlist[j].number));
                 }
             }
-            return newlist;
+            huffmanlist = newlist;
+
         }
     }
 
@@ -211,6 +211,7 @@ namespace multimedia
                 artlist.Add(new letter(arthmitclist[i].data,arthmitclist[i].upper,arthmitclist[i].lower));
             }
             Double up=1, down=0;
+            string end = input[input.Length - 1]+"";
             string curr = "";
             for (int i = 0; i < input.Length; i++)
             {
@@ -219,18 +220,18 @@ namespace multimedia
                 {
                     if (artlist[j].data == curr)
                     {
+                        curr = "";
                         up = artlist[j].upper;
                         down = artlist[j].lower;
                         Double ratio = up - down;
                         for (int k = 0; k < arthmitclist.Count; k++)
                         {
-                            artlist[j].lower = artlist[j].lower * ratio + down;
-                            artlist[j].upper = artlist[j].upper*ratio+down;
+                            artlist[j].lower = arthmitclist[j].lower * ratio + down;
+                            artlist[j].upper = arthmitclist[j].upper * ratio + down;
                         }
-                        if (j == arthmitclist.Count - 1) //end of coding  need to change
+                        if (artlist[j]+""==end) //end of coding  need to change
                         {
                             list.Add((up + down) / 2.0);
-                            curr = "";
                             up = 1;
                             down = 0;
                             artlist.Clear();
@@ -245,7 +246,7 @@ namespace multimedia
             return list;
         }
 
-        public static string decodeData(Double input) //given double ,output data  for each double
+        public static string decodeData(Double input,string end) //given double & the last symple in the text ,output data  for each double
         {
             string res = "";
             IList<letter> artlist = new List<letter>();
@@ -262,17 +263,17 @@ namespace multimedia
                     if (input < arthmitclist[j].upper && input > arthmitclist[j].lower)
                     {
                         res += arthmitclist[j].data;
+                        if (arthmitclist[j].data == end) //end of coding  need to change 
+                        {
+                            return res;
+                        }
                         Double up = artlist[j].upper;
                         Double down = artlist[j].lower;
                         Double ratio = up - down;
                         for (int k = 0; k < arthmitclist.Count; k++)
                         {
-                            artlist[j].lower = artlist[j].lower * ratio + down;
-                            artlist[j].upper = artlist[j].upper * ratio + down;
-                        }
-                        if (j == arthmitclist.Count - 1) //end of coding  need to change 
-                        {
-                            return res;
+                            artlist[j].lower = arthmitclist[j].lower * ratio + down;
+                            artlist[j].upper = arthmitclist[j].upper * ratio + down;
                         }
                     }
                 }
@@ -281,5 +282,79 @@ namespace multimedia
 
 
 
+    }
+
+
+    class lzw
+    {
+        static public IList<char> LetterDict;
+
+        static void Main(string[] input, int[] array) //give them array of string & array of number of each string
+        {
+            LetterDict = new List<char>();
+            //fill letterdict with all letter in the data set
+        }
+
+
+
+        static IList<int> Coding(string input) //given string , output code
+        {
+            IList<int> mylist=new List<int>();
+            IList<string> Dict=new List<string>();
+            for (int i = 0; i < LetterDict.Count; i++)
+            {
+                string x =""+ LetterDict[i];
+                Dict.Add(x);
+            }
+            string curr="";
+            int last = 0;
+            for (int i = 0; i < input.Length; i++)
+            {
+                bool test = true;
+                curr += input[i];
+                for (int j = 0; j < Dict.Count; j++)
+                {
+                    if (curr == Dict[j])
+                    {
+                        last = j;
+                        test = false;
+                        break;
+                    }
+                }
+                if (test)
+                {
+                    mylist.Add(last);
+                    Dict.Add(curr);
+                    string temp = "";
+                    for (int j = 1; j < curr.Length; j++)
+                        temp += curr[j];
+                }
+                
+            }
+            return mylist;
+        }
+
+
+        static string deCoding(int[] input) //given code , output string
+        {
+            string res = "";
+            IList<string> Dict = new List<string>();
+            for (int i = 0; i < LetterDict.Count; i++)
+            {
+                string x = "" + LetterDict[i];
+                Dict.Add(x);
+            }
+            string last = Dict[input[0]];
+            res+=last;
+            for (int i = 1; i < input.Length; i++)
+            {
+
+                res += Dict[input[i]];
+                Dict.Add(last + Dict[input[i]][0]);
+                last = Dict[input[i]];
+
+            }
+            return res;
+        }
     }
 }
