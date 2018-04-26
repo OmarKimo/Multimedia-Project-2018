@@ -39,9 +39,7 @@ namespace multimedia
                 fr.Close();
                 sr.Close();
                 NameOfFile.Text = fileNameWithoutPath;
-
-                string EncodedText = Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(text));
-                Process(EncodedText);
+                Process(text);
             }
             catch (Exception ex)
             {
@@ -51,8 +49,18 @@ namespace multimedia
 
         private void Process(string text)
         {
-            string uniqueChars = String.Join("",text.Distinct());
-            MessageBox.Show(uniqueChars);
+            string EncodedText = Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(text));
+            string uniqueChars = String.Join("",EncodedText.Distinct());
+
+            StreamWriter of = new StreamWriter("testFile.txt"); //Just for test
+
+            Dictionary<char, int> dict = new Dictionary<char,int>();
+            foreach (char ch in uniqueChars)
+            {
+                dict.Add(ch, text.Count(f => f == ch));
+                of.Write(ch.ToString() + " " + dict[ch].ToString() + "\r\n");
+            }
+            of.Close();
         }
     }
 }
