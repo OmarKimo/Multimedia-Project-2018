@@ -206,8 +206,8 @@ namespace multimedia
 
     class letter
     {
-        public Double upper;
-        public Double lower;
+        public double upper;
+        public double lower;
         public string data;
         public letter(string data,double up,double low)
         {
@@ -220,8 +220,8 @@ namespace multimedia
 
     class arthmitc
     {
-        static private IList<letter> arthmitclist;
-        static void Main(string[] input, int[] array) //give them array of string & array of number of each string
+        static public IList<letter> arthmitclist;
+        public static void Main(string[] input, int[] array) //give them array of string & array of number of each string
         {
             arthmitclist = new List<letter>();
             long sum = 0;
@@ -232,21 +232,21 @@ namespace multimedia
             double curr = 0.0;
             for (int i = 0; i < array.Length; i++)
             {
-                arthmitclist.Add(new letter(input[i], curr / sum, (curr + array[i]) / sum));
+                arthmitclist.Add(new letter(input[i] ,(curr + array[i]) / sum, curr / sum));
                 curr += array[i];
 
             }
         }
-        public static IList<Double> codeData(string input) //given data ,output code
+        public static IList<double> codeData(string input) //given data ,output code
         {
-            IList<Double> list = new List<Double>();
+            IList<double> list = new List<double>();
             IList<letter> artlist = new List<letter>();
             for (int i = 0; i < arthmitclist.Count; i++)
             { 
                 artlist.Add(new letter(arthmitclist[i].data,arthmitclist[i].upper,arthmitclist[i].lower));
             }
-            Double up=1, down=0;
-            string end = input[input.Length - 1]+"";
+            double up=1, down=0;
+            string end = input[input.Length - 1]+""; //need to change
             string curr = "";
             for (int i = 0; i < input.Length; i++)
             {
@@ -258,13 +258,8 @@ namespace multimedia
                         curr = "";
                         up = artlist[j].upper;
                         down = artlist[j].lower;
-                        Double ratio = up - down;
-                        for (int k = 0; k < arthmitclist.Count; k++)
-                        {
-                            artlist[j].lower = arthmitclist[j].lower * ratio + down;
-                            artlist[j].upper = arthmitclist[j].upper * ratio + down;
-                        }
-                        if (artlist[j]+""==end) //end of coding  need to change
+                        double ratio = up - down;
+                        if ((artlist[j].data+"")==end) //end of coding  need to change
                         {
                             list.Add((up + down) / 2.0);
                             up = 1;
@@ -274,15 +269,25 @@ namespace multimedia
                             {
                                 artlist.Add(new letter(arthmitclist[k].data, arthmitclist[k].upper, arthmitclist[k].lower));
                             }
+                            break;
                         }
+                        for (int k = 0; k < arthmitclist.Count; k++)
+                        {
+                            artlist[k].lower = arthmitclist[k].lower * ratio + down;
+                            artlist[k].upper = arthmitclist[k].upper * ratio + down;
+                        }
+                        break;
                     }
                 }
             }
             return list;
         }
 
-        public static string decodeData(Double input,string end) //given double & the last symple in the text ,output data  for each double
+        public static string decodeData(double input,string end) //given double & the last symple in the text ,output data  for each double
         {
+            if (input == null || end == null)
+                return null;
+
             string res = "";
             IList<letter> artlist = new List<letter>();
             for (int i = 0; i < arthmitclist.Count; i++)
@@ -295,27 +300,39 @@ namespace multimedia
 
                 for (int j = 0; j < artlist.Count; j++)
                 {
-                    if (input < arthmitclist[j].upper && input > arthmitclist[j].lower)
+                    if (input < artlist[j].upper && input > artlist[j].lower)
                     {
-                        res += arthmitclist[j].data;
-                        if (arthmitclist[j].data == end) //end of coding  need to change 
+                        res += artlist[j].data;
+                        if (artlist[j].data == end) //end of coding  need to change 
                         {
                             return res;
                         }
-                        Double up = artlist[j].upper;
-                        Double down = artlist[j].lower;
-                        Double ratio = up - down;
+                        double up = artlist[j].upper;
+                        double down = artlist[j].lower;
+                        double ratio = up - down;
                         for (int k = 0; k < arthmitclist.Count; k++)
                         {
-                            artlist[j].lower = arthmitclist[j].lower * ratio + down;
-                            artlist[j].upper = arthmitclist[j].upper * ratio + down;
+                            artlist[k].lower = arthmitclist[k].lower * ratio + down;
+                            artlist[k].upper = arthmitclist[k].upper * ratio + down;
                         }
                     }
                 }
             }
         }
 
+        public static string  doubletobinary(double x)
+        {
+            long m = BitConverter.DoubleToInt64Bits(x); 
+            string str = Convert.ToString(m, 2); 
+            return str;
+        }
 
+        public static double Binarytodouble(string str)
+        {
+            long n = Convert.ToInt64(str, 2); 
+            double x = BitConverter.Int64BitsToDouble(n); 
+            return x;
+        }
 
     }
 
