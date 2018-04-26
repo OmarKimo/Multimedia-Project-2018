@@ -62,5 +62,22 @@ namespace multimedia
             }
             of.Close();
         }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            string[] x ={"a","b","c","d","e","f"};
+            int[] arr={12,3,400,200,1,30};
+            Huffman.build(x,arr);
+            IList<Node> list = Huffman.Gethuffman();
+            string y = Huffman.codeData("abcd"); //000100001101
+            string z = Huffman.DecodeData("010000101");//bdb
+            Huffman.extendhuffman();
+            list = Huffman.Gethuffman();
+            bool test = list[0] == null;
+
+            
+            
+            
+        }
     }
 }

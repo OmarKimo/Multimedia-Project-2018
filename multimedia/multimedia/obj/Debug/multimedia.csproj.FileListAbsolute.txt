@@ -11,3 +11,9 @@ D:\Major & Interests\Github Repositories & My Projects\Multimedia-Project-2018\m
 D:\Major & Interests\Github Repositories & My Projects\Multimedia-Project-2018\multimedia\multimedia\obj\Debug\multimedia.pdb
 D:\Computer department\cairo university\Assembly game\Multimedia-Project-2018\multimedia\multimedia\obj\Debug\multimedia.exe
 D:\Computer department\cairo university\Assembly game\Multimedia-Project-2018\multimedia\multimedia\obj\Debug\multimedia.pdb
+D:\Computer department\cairo university\Assembly game\Multimedia-Project-2018\multimedia\multimedia\obj\Debug\multimedia.csprojResolveAssemblyReference.cache
+D:\Computer department\cairo university\Assembly game\Multimedia-Project-2018\multimedia\multimedia\obj\Debug\multimedia.Form1.resources
+D:\Computer department\cairo university\Assembly game\Multimedia-Project-2018\multimedia\multimedia\obj\Debug\multimedia.Properties.Resources.resources
+D:\Computer department\cairo university\Assembly game\Multimedia-Project-2018\multimedia\multimedia\obj\Debug\multimedia.csproj.GenerateResource.Cache
+D:\Computer department\cairo university\Assembly game\Multimedia-Project-2018\multimedia\multimedia\bin\Debug\multimedia.exe
+D:\Computer department\cairo university\Assembly game\Multimedia-Project-2018\multimedia\multimedia\bin\Debug\multimedia.pdb

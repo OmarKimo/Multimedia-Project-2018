@@ -36,8 +36,8 @@ namespace multimedia
     class Huffman
     {
         static private IList<Node> huffmanlist; //include all letter with thier code
-        public IList<Node> Gethuffman() //get copy of list
-        {
+        static public IList<Node> Gethuffman() //tested
+        {//get copy of list
             IList<Node> newlist = new List<Node>();
 
             for (int i = 0; i < huffmanlist.Count; i++)
@@ -47,9 +47,8 @@ namespace multimedia
             } 
             return newlist;
         }
-        static void Main(string[] input, int[] array) //give them array of string & array of number of each string
-        {
-            huffmanlist.Clear();
+        static public void build(string[] input, int[] array) //tested
+        {//give them array of string & array of number of each string
             IList<Node> list = new List<Node>();
             huffmanlist = new List<Node>();
             for (int i = 0; i < array.Length; i++)
@@ -73,12 +72,12 @@ namespace multimedia
 
             Node parentNode1 = stack.Pop();
 
-            GenerateCode(parentNode1, "");
+            GenerateCode(parentNode1,"");
 
         }
 
-        public static Stack<Node> GetSortedStack(IList<Node> list) //sort thd probability
-        {
+        public static Stack<Node> GetSortedStack(IList<Node> list) //tested
+        {//sort thd probability
             //sort the nodes
             for (int i = 0; i < list.Count; i++)
             {
@@ -99,24 +98,25 @@ namespace multimedia
             return stack;
         }
 
-        public static void GenerateCode(Node parentNode)
+        public static void GenerateCode(Node parentNode,string code) //tested
         { //after build tree , apply this function on the parent node to get the code for each symple
             if (parentNode == null)
                 return;
             else if (parentNode.leftChild == null)
+            {
+                parentNode.code = code;
                 huffmanlist.Add(parentNode);
+            }
             else
             {
-                parentNode.leftChild.code += "0";
-                parentNode.rightChild.code += "1";
-                GenerateCode(parentNode.leftChild);
-                GenerateCode(parentNode.rightChild);
+                GenerateCode(parentNode.leftChild,code+"0");
+                GenerateCode(parentNode.rightChild,code+"1");
             }
             
         }
 
-        public static string codeData(string input) //given data ,output code
-        {
+        public static string codeData(string input) //tested
+        {//given data ,output code
             string res = "";
             for (int i = 0; i < input.Length; i++)
             {
@@ -133,8 +133,8 @@ namespace multimedia
             return res;
         }
 
-        public static string DecodeData(string input) //given code ,output data
-        {
+        public static string DecodeData(string input) //tested
+        {//given code ,output data
             string res = "";
             string curr = "";
             for (int i = 0; i < input.Length; i++)
@@ -158,6 +158,7 @@ namespace multimedia
         public static void extendhuffman()//extend huffman code 
         {
             IList<Node> newlist = new List<Node>();
+            //build new list
             for (int i = 0; i < huffmanlist.Count; i++)
             {
                 for (int j = i; j < huffmanlist.Count; j++)
@@ -165,7 +166,40 @@ namespace multimedia
                     newlist.Add(new Node(huffmanlist[i].data + huffmanlist[j].data, huffmanlist[i].number * huffmanlist[j].number));
                 }
             }
-            huffmanlist = newlist;
+
+
+            //build the tree
+            Stack<Node> stack = GetSortedStack(newlist);
+            while (stack.Count > 1)
+            {
+                //move last 2 least number
+                Node leftChild = stack.Pop();
+                Node rightChild = stack.Pop();
+                //repalce them with the sum of them 
+                Node parentNode = new Node(leftChild, rightChild);
+                stack.Push(parentNode);
+                //sort again
+                stack = GetSortedStack(stack.ToList<Node>());
+            }
+
+            Node parentNode1 = stack.Pop();
+            huffmanlist = new List<Node>();
+            GenerateCode(parentNode1, "");
+
+
+            //for debug
+            //for (int i = 0; i < huffmanlist.Count; i++)
+            //{
+            //    for (int j = i + 1; j < huffmanlist.Count; j++)
+            //    {
+            //        if (huffmanlist[i].number < huffmanlist[j].number)
+            //        {
+            //            Node tempNode = huffmanlist[j];
+            //            huffmanlist[j] = huffmanlist[i];
+            //            huffmanlist[i] = tempNode;
+            //        }
+            //    }
+            //}
 
         }
     }
@@ -289,11 +323,11 @@ namespace multimedia
     class lzw
     {
         static public IList<char> LetterDict;
-        static private int Max;
+        //static private int Max; handle in input
 
         static void Main(string[] input, int[] array) //give them array of string & array of number of each string
         {
-            Max = 10000;
+            
             LetterDict = new List<char>();
             //fill letterdict with all letter in the data set
         }
@@ -324,7 +358,7 @@ namespace multimedia
                         break;
                     }
                 }
-                if (test&& (Max>mylist.Count)) 
+                if (test) 
                 {
                     mylist.Add(last);
                     Dict.Add(curr);
@@ -350,8 +384,7 @@ namespace multimedia
             for (int i = 1; i < input.Length; i++)
             {
                 res += Dict[input[i]];
-                if(Dict.Count<Max)
-                    Dict.Add(last + Dict[input[i]][0]);
+                Dict.Add(last + Dict[input[i]][0]);
                 last = Dict[input[i]];
             }
             return res;

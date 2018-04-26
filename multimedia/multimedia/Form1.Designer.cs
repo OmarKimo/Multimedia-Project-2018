@@ -36,29 +36,30 @@
             // 
             // Compress
             // 
-            this.Compress.Location = new System.Drawing.Point(46, 112);
-            this.Compress.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Compress.Location = new System.Drawing.Point(61, 138);
+            this.Compress.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Compress.Name = "Compress";
-            this.Compress.Size = new System.Drawing.Size(118, 78);
+            this.Compress.Size = new System.Drawing.Size(157, 96);
             this.Compress.TabIndex = 0;
             this.Compress.Text = "Compress";
             this.Compress.UseVisualStyleBackColor = true;
             // 
             // unCompress
             // 
-            this.unCompress.Location = new System.Drawing.Point(292, 112);
-            this.unCompress.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.unCompress.Location = new System.Drawing.Point(389, 138);
+            this.unCompress.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.unCompress.Name = "unCompress";
-            this.unCompress.Size = new System.Drawing.Size(118, 78);
+            this.unCompress.Size = new System.Drawing.Size(157, 96);
             this.unCompress.TabIndex = 1;
             this.unCompress.Text = "unCompress";
             this.unCompress.UseVisualStyleBackColor = true;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(143, 42);
+            this.button1.Location = new System.Drawing.Point(191, 52);
+            this.button1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(92, 34);
+            this.button1.Size = new System.Drawing.Size(123, 42);
             this.button1.TabIndex = 2;
             this.button1.Text = "Choose file";
             this.button1.UseVisualStyleBackColor = true;
@@ -66,25 +67,27 @@
             // 
             // NameOfFile
             // 
-            this.NameOfFile.Location = new System.Drawing.Point(259, 42);
+            this.NameOfFile.Location = new System.Drawing.Point(345, 52);
+            this.NameOfFile.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.NameOfFile.Multiline = true;
             this.NameOfFile.Name = "NameOfFile";
             this.NameOfFile.ReadOnly = true;
-            this.NameOfFile.Size = new System.Drawing.Size(168, 34);
+            this.NameOfFile.Size = new System.Drawing.Size(223, 41);
             this.NameOfFile.TabIndex = 3;
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(482, 225);
+            this.ClientSize = new System.Drawing.Size(643, 277);
             this.Controls.Add(this.NameOfFile);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.unCompress);
             this.Controls.Add(this.Compress);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
