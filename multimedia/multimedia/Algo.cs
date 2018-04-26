@@ -28,14 +28,14 @@ namespace multimedia
         {
             this.leftChild = leftChild;
             this.rightChild = rightChild;
-            this.data = leftChild.data + rightChild.data;
+            this.data = leftChild.data + rightChild.data; //for debug >>can remove it
             this.number = leftChild.number + rightChild.number;
         }
     }
 
     class Huffman
     {
-        static private IList<Node> huffmanlist;
+        static private IList<Node> huffmanlist; //include all letter with thier code
         public IList<Node> Gethuffman() //get copy of list
         {
             IList<Node> newlist = new List<Node>();
@@ -49,8 +49,9 @@ namespace multimedia
         }
         static void Main(string[] input, int[] array) //give them array of string & array of number of each string
         {
+            huffmanlist.Clear();
             IList<Node> list = new List<Node>();
-            IList<Node> huffmanlist = new List<Node>();
+            huffmanlist = new List<Node>();
             for (int i = 0; i < array.Length; i++)
             {
                 list.Add(new Node(input[i], array[i]));
@@ -98,19 +99,18 @@ namespace multimedia
             return stack;
         }
 
-        public static void GenerateCode(Node parentNode, string code) //after build tree , apply this function on the parent node to get the code for each string 
-        {
+        public static void GenerateCode(Node parentNode)
+        { //after build tree , apply this function on the parent node to get the code for each symple
             if (parentNode == null)
                 return;
             else if (parentNode.leftChild == null)
-            {
-                parentNode.code = code;
                 huffmanlist.Add(parentNode);
-            }
             else
             {
-                GenerateCode(parentNode.leftChild, code + "0");
-                GenerateCode(parentNode.rightChild, code + "1");
+                parentNode.leftChild.code += "0";
+                parentNode.rightChild.code += "1";
+                GenerateCode(parentNode.leftChild);
+                GenerateCode(parentNode.rightChild);
             }
             
         }
@@ -124,6 +124,7 @@ namespace multimedia
                 {
                     if (input[i] == huffmanlist[j].data[0])
                     {
+                      
                         res += huffmanlist[j].code;
                         break;
                     }
@@ -288,9 +289,11 @@ namespace multimedia
     class lzw
     {
         static public IList<char> LetterDict;
+        static private int Max;
 
         static void Main(string[] input, int[] array) //give them array of string & array of number of each string
         {
+            Max = 10000;
             LetterDict = new List<char>();
             //fill letterdict with all letter in the data set
         }
@@ -321,7 +324,7 @@ namespace multimedia
                         break;
                     }
                 }
-                if (test)
+                if (test&& (Max>mylist.Count)) 
                 {
                     mylist.Add(last);
                     Dict.Add(curr);
@@ -333,8 +336,6 @@ namespace multimedia
             }
             return mylist;
         }
-
-
         static string deCoding(int[] input) //given code , output string
         {
             string res = "";
@@ -348,11 +349,10 @@ namespace multimedia
             res+=last;
             for (int i = 1; i < input.Length; i++)
             {
-
                 res += Dict[input[i]];
-                Dict.Add(last + Dict[input[i]][0]);
+                if(Dict.Count<Max)
+                    Dict.Add(last + Dict[input[i]][0]);
                 last = Dict[input[i]];
-
             }
             return res;
         }
