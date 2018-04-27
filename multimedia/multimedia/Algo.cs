@@ -115,17 +115,16 @@ namespace multimedia
             
         }
 
-        public static string codeData(string input) //tested
-        {//given data ,output code
-            string res = "";
+        public static IList<string> codeData(string input) //tested
+        {//given data ,output list of code
+            IList<string> res = new List<string>();
             for (int i = 0; i < input.Length; i++)
             {
                 for (int j = 0; j < huffmanlist.Count; j++)
                 {
                     if (input[i] == huffmanlist[j].data[0])
                     {
-                      
-                        res += huffmanlist[j].code;
+                        res.Add(huffmanlist[j].code);
                         break;
                     }
                 }
@@ -221,7 +220,7 @@ namespace multimedia
     class arthmitc
     {
         static public IList<letter> arthmitclist;
-        public static void Main(string[] input, int[] array) //give them array of string & array of number of each string
+        public static void Main(string[] input, int[] array) //given array of string & array of number of each string
         {
             arthmitclist = new List<letter>();
             long sum = 0;
@@ -407,4 +406,8 @@ namespace multimedia
             return res;
         }
     }
+
+
+
+
 }
