@@ -43,6 +43,7 @@
             this.Compress.TabIndex = 0;
             this.Compress.Text = "Compress";
             this.Compress.UseVisualStyleBackColor = true;
+            this.Compress.Click += new System.EventHandler(this.Compress_Click);
             // 
             // unCompress
             // 
@@ -57,7 +58,7 @@
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(191, 52);
-            this.button1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(123, 42);
             this.button1.TabIndex = 2;
@@ -68,7 +69,7 @@
             // NameOfFile
             // 
             this.NameOfFile.Location = new System.Drawing.Point(345, 52);
-            this.NameOfFile.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.NameOfFile.Margin = new System.Windows.Forms.Padding(4);
             this.NameOfFile.Multiline = true;
             this.NameOfFile.Name = "NameOfFile";
             this.NameOfFile.ReadOnly = true;

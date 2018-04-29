@@ -72,7 +72,7 @@ namespace multimedia
 
             Node parentNode1 = stack.Pop();
 
-            GenerateCode(parentNode1,"");
+            GenerateCode(parentNode1);
 
         }
 
@@ -98,19 +98,20 @@ namespace multimedia
             return stack;
         }
 
-        public static void GenerateCode(Node parentNode,string code) //tested
+        public static void GenerateCode(Node parentNode) //tested
         { //after build tree , apply this function on the parent node to get the code for each symple
             if (parentNode == null)
                 return;
             else if (parentNode.leftChild == null)
             {
-                parentNode.code = code;
                 huffmanlist.Add(parentNode);
             }
             else
             {
-                GenerateCode(parentNode.leftChild,code+"0");
-                GenerateCode(parentNode.rightChild,code+"1");
+                parentNode.leftChild.code = parentNode.code + "0";
+                parentNode.rightChild.code = parentNode.code + "1";
+                GenerateCode(parentNode.leftChild);
+                GenerateCode(parentNode.rightChild);
             }
             
         }
@@ -183,7 +184,7 @@ namespace multimedia
 
             Node parentNode1 = stack.Pop();
             huffmanlist = new List<Node>();
-            GenerateCode(parentNode1, "");
+            GenerateCode(parentNode1);
 
 
             //for debug

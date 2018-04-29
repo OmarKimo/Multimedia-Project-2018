@@ -8,9 +8,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+ 
 namespace multimedia
 {
+    
     public partial class Form1 : Form
     {
         public Form1()
@@ -67,25 +68,30 @@ namespace multimedia
         {
             string[] x ={"a","b","c","d","e","f"};
             int[] arr={12,3,400,200,1,30};
-            //Huffman.build(x,arr);
-            //IList<Node> list = Huffman.Gethuffman();
-            //string y = Huffman.codeData("abcd"); //000100001101
-            //string z = Huffman.DecodeData("010000101");//bdb
-            //Huffman.extendhuffman();
-            //list = Huffman.Gethuffman();
-            //bool test = list[0] == null;
-            arthmitc.Main(x, arr);
-            letter y=arthmitc.arthmitclist[0];
-            IList<Double> c=arthmitc.codeData("abc");
-            string f = arthmitc.decodeData(c[0], "c");
-            f=arthmitc.doubletobinary(arthmitc.Binarytodouble("01010001"));
-            double r=arthmitc.Binarytodouble("10010");
-            f = arthmitc.doubletobinary(0.5);
+            Huffman.build(x, arr);
+            IList<Node> list = Huffman.Gethuffman();
+            IList<string> y = Huffman.codeData("abcd"); //000100001101
+            string z = Huffman.DecodeData("010000101");//bdb
+            Huffman.extendhuffman();
+            list = Huffman.Gethuffman();
+            bool test = list[0] == null;
+            //arthmitc.Main(x, arr);
+            //letter y=arthmitc.arthmitclist[0];
+            //IList<Double> c=arthmitc.codeData("abc");
+            //string f = arthmitc.decodeData(c[0], "c");
+            //f=arthmitc.doubletobinary(arthmitc.Binarytodouble("01010001"));
+            //double r=arthmitc.Binarytodouble("10010");
+            //f = arthmitc.doubletobinary(0.5);
 
 
             
             
             
+        }
+
+        private void Compress_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
