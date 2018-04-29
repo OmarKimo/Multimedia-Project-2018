@@ -47,11 +47,11 @@ namespace multimedia
             } 
             return newlist;
         }
-        static public void build(string[] input, int[] array) //tested
+        static public void build(IList<string> input, IList<int> array) //tested
         {//give them array of string & array of number of each string
             IList<Node> list = new List<Node>();
             huffmanlist = new List<Node>();
-            for (int i = 0; i < array.Length; i++)
+            for (int i = 0; i < array.Count; i++)
             {
                 list.Add(new Node(input[i], array[i]));
             }
