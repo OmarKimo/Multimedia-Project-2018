@@ -14,9 +14,15 @@ namespace multimedia
     
     public partial class Form1 : Form
     {
+        public IList<char> generalChars;
+        public IList<int> cntChars;
+        //public string tmpText;
         public Form1()
         {
             InitializeComponent();
+            generalChars = new List<char>();
+            cntChars = new List<int>();
+            //tmpText = "";
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -52,14 +58,16 @@ namespace multimedia
         {
             string EncodedText = Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(text));
             string uniqueChars = String.Join("",EncodedText.Distinct());
-
+            //tmpText += uniqueChars;
             StreamWriter of = new StreamWriter("testFile.txt"); //Just for test
 
-            Dictionary<char, int> dict = new Dictionary<char,int>();
+            //Dictionary<char, int> dict = new Dictionary<char,int>();
             foreach (char ch in uniqueChars)
             {
-                dict.Add(ch, text.Count(f => f == ch));
-                of.Write(ch.ToString() + " " + dict[ch].ToString() + "\r\n");
+                int count = text.Count(f => f == ch);
+                cntChars.Add(count);
+                generalChars.Add(ch);
+                of.Write(ch.ToString() + "\n");
             }
             of.Close();
         }
@@ -92,6 +100,23 @@ namespace multimedia
         private void Compress_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            /*for (int i = 0; i < 20; i++)
+            {
+                button1.PerformClick();
+            }
+            tmpText = String.Join("", tmpText.Distinct());
+            StreamWriter of = new StreamWriter("lzw Dictionary.txt"); //Just for test
+
+            //Dictionary<char, int> dict = new Dictionary<char,int>();
+            foreach (char ch in tmpText)
+            {
+                of.Write(ch.ToString() + "\n");
+            }
+            of.Close();*/
         }
     }
 }
