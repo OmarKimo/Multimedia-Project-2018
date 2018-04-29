@@ -339,14 +339,18 @@ namespace multimedia
 
     class lzw
     {
-        static public IList<char> LetterDict;
+        static public IList<string> LetterDict;
         //static private int Max; handle in input
 
-        static void Main(string[] input, int[] array) //give them array of string & array of number of each string
+        static void Main(IList<string> input) //give them array of string & array of number of each string
         {
-            
-            LetterDict = new List<char>();
             //fill letterdict with all letter in the data set
+            LetterDict = new List<string>();
+            for (int i = 0; i < input.Count; i++)
+            {
+                LetterDict.Add(input[i]);
+            }
+            
         }
 
 
@@ -357,8 +361,7 @@ namespace multimedia
             IList<string> Dict=new List<string>();
             for (int i = 0; i < LetterDict.Count; i++)
             {
-                string x =""+ LetterDict[i];
-                Dict.Add(x);
+                Dict.Add(LetterDict[i]);
             }
             string curr="";
             int last = 0;
