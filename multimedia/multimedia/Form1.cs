@@ -17,16 +17,15 @@ namespace multimedia
         public IList<int> cntChars;
         private string fileNameWithPath;
         private string fileNameWithoutPath;
-        //private string tmpText;
-        //private int mxCnt;
+        private string tmpText;
         private IList<string> paths;
+        private IList<string> allChars;
         public Form1()
         {
             InitializeComponent();
             generalChars = new List<string>();
             cntChars = new List<int>();
-            //tmpText = "";
-            //mxCnt = 0;
+            tmpText = "";
             fileNameWithPath = "";
             fileNameWithoutPath = "";
             paths = new List<string>();
@@ -34,6 +33,8 @@ namespace multimedia
             {
                 paths.Add("D:\\Major & Interests\\Github Repositories & My Projects\\Multimedia-Project-2018\\DataSet\\DataSet_" + (i + 1).ToString() + ".tsv");
             }
+            allChars = new List<string>();
+            init(allChars);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -78,6 +79,19 @@ namespace multimedia
             
         }
 
+        private void init(IList<string> chars)
+        {
+            FileStream fr = new FileStream("D:\\Major & Interests\\Github Repositories & My Projects\\Multimedia-Project-2018\\lzw Dictionary.txt", FileMode.Open, FileAccess.Read);
+            StreamReader sr = new StreamReader(fr);
+            string txt = sr.ReadToEnd();
+            fr.Close();
+            sr.Close();
+            foreach (char ch in txt)
+            {
+                allChars.Add(ch.ToString());
+            }
+        }
+
         private void Compress_Click(object sender, EventArgs e)
         {
             try
@@ -120,7 +134,7 @@ namespace multimedia
         {
             string EncodedText = Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(text));
             string uniqueChars = String.Join("", EncodedText.Distinct());
-            //tmpText += uniqueChars;
+            tmpText += uniqueChars;
             //StreamWriter of = new StreamWriter("testFile.txt"); //Just for test
 
             Dictionary<char, int> dict = new Dictionary<char,int>();
@@ -196,12 +210,12 @@ namespace multimedia
                 
                 string DecodedText = Huffman.DecodeData(textToBeUnCompressed,generalChars);
 
-                FileStream file = new FileStream(fileNameWithPath.Split('.').First() + "_1.bin", FileMode.Create);
+                FileStream file = new FileStream(fileNameWithPath.Split('.').First() + "_1.txt", FileMode.Create);
                 StreamWriter DecodedFile = new StreamWriter(file);
                 DecodedFile.Write(DecodedText);
 
-                file.Close();
                 DecodedFile.Close();
+                file.Close();
                 MessageBox.Show("Uncompression is done!");
             }
             catch (Exception ex)
