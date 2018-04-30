@@ -75,10 +75,11 @@ namespace multimedia
                 //sort again
                 stack = GetSortedStack(stack.ToList<Node>());
             }
-
-            Node parentNode1 = stack.Pop();
-
-            GenerateCode(parentNode1);
+            if (stack.Count == 1)
+            {
+                Node parentNode1 = stack.Pop();
+                GenerateCode(parentNode1);
+            }  
 
         }
 
@@ -140,25 +141,23 @@ namespace multimedia
             int y = input.Length;
             for (int i = 20; i > -1; i--)
             {
-                if ((i << 1) < y)
+                if (((1 << i)&y)!=0)
                 {
                     res += '1';
-                    y -= (i << 1);
+                    y ^= (1<<i);
                 }
                 else 
-                {
                     res += '0';
-                }
             }
             for (int i = 0; i < dict.Count; i++)
             {
                 int x = dict[i];
                 for (int j = 17; j > -1; j--)
                 {
-                    if ((j<< 1) < y)
+                    if (((1<< j)& x)!=0)
                     {
                         res += '1';
-                        x -= (j<< 1);
+                        x ^= (1<<j);
                     }
                     else
                     {
@@ -186,8 +185,7 @@ namespace multimedia
             int x=0,length=0;
             for (int i = 0; i < 21; i++)
             {
-                length += ((21 - i) << (input[x] - '0'));
-                x++;
+                length |= ((input[x++] - '0')<<(21 - i));
             }
             IList<int> mynum = new List<int>();
             for (int i = 0; i < GeneralDict.Count; i++)
@@ -195,8 +193,7 @@ namespace multimedia
                 int y = 0;
                 for (int j = 0; j < 18; j++)
                 {
-                    y += ((17 - i) << (input[x] - '0'));
-                    x++;
+                    y |=( ( (input[x++] - '0') << (17 - j)));
                 }
                 mynum.Add(y);
             }
@@ -470,7 +467,7 @@ namespace multimedia
 
                 for (int j = 31; j >-1;j--)
                 {
-                    if ((input[i]&(i<<1))!=0)
+                    if ((input[i]&(1<<i))!=0)
                         res+='1';
                     else
                         res+='0';
@@ -512,9 +509,7 @@ namespace multimedia
                     res.Add(curr);
                     curr = 0;
                 }
-                if (input[i] == '1')
-                    curr = curr | 1;
-                curr = 1 << curr;
+                curr=(curr|(input[i]-'0'))<<1;
             }
             return res;
         }

@@ -57,17 +57,18 @@ namespace multimedia
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            string[] x ={"a","b","c","d","e","f"};
-            int[] arr={12,3,400,200,1,30};
-            //test huffman 
-            /*Huffman.build(x, arr);
-            IList<Node> list = Huffman.Gethuffman(); //for debug
-            string y = Huffman.codeData("abcd"); //000100001101
-            y = Huffman.DecodeData(y); //check if return same value abcd
-            string z = Huffman.DecodeData("010000101");//bdb
-            Huffman.extendhuffman();
-            list = Huffman.Gethuffman();
-            bool test = list[0] == null;
+            //string[] x ={"a","b","c","d","e","f"};
+            //int[] arr={12,3,400,200,1,30};
+            ////test huffman 
+            //Huffman.build(x, arr);
+            //IList<Node> list = Huffman.Gethuffman(); //for debug
+            //string y = Huffman.codeData("abcd"); //000100001101
+            //y = "001110000000000000010000101010101010010101010100101010101010101010101010101010111110101011101001010101";
+            //y = Huffman.DecodeData(y,generalChars); //check if return same value abcd
+            ////string z = Huffman.DecodeData("010000101",);//bdb
+            //Huffman.extendhuffman();
+            //list = Huffman.Gethuffman();
+            //bool test = list[0] == null;
             //test arthmitic
             //arthmitc.Main(x, arr);
             //letter y=arthmitc.arthmitclist[0];
@@ -75,13 +76,13 @@ namespace multimedia
             //string f = arthmitc.decodeData(c[0], "c");
             //f=arthmitc.doubletobinary(arthmitc.Binarytodouble("01010001"));
             //double r=arthmitc.Binarytodouble("10010");
-            //f = arthmitc.doubletobinary(0.5);*/
+            //f = arthmitc.doubletobinary(0.5);
             
         }
 
         private void init(IList<string> chars)
         {
-            FileStream fr = new FileStream("D:\\Major & Interests\\Github Repositories & My Projects\\Multimedia-Project-2018\\lzw Dictionary.txt", FileMode.Open, FileAccess.Read);
+            FileStream fr = new FileStream("D:\\Computer department\\cairo university\\Assembly game\\Multimedia-Project-2018\\lzw Dictionary.txt", FileMode.Open, FileAccess.Read);
             StreamReader sr = new StreamReader(fr);
             string txt = sr.ReadToEnd();
             fr.Close();
@@ -110,6 +111,7 @@ namespace multimedia
                 Process(textToBeCompressed);
 
                 Huffman.build(generalChars,cntChars);
+                Huffman.extendhuffman();
                 string binarizedChars = Huffman.codeData(textToBeCompressed);
                 byte[] bytesFile = GetBytes(binarizedChars);
 
@@ -207,7 +209,7 @@ namespace multimedia
                 fr.Close();
                 br.Close();
 
-                
+
                 string DecodedText = Huffman.DecodeData(textToBeUnCompressed,generalChars);
 
                 FileStream file = new FileStream(fileNameWithPath.Split('.').First() + "_1.txt", FileMode.Create);
