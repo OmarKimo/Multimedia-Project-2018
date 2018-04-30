@@ -36,6 +36,7 @@ namespace multimedia
     class Huffman
     {
         static public int numberofextend;
+        static public int codelength;
         static private IList<Node> huffmanlist; //include all letter with thier code
         static private IList<int> dict;
         static public IList<Node> Gethuffman() //tested
@@ -119,6 +120,17 @@ namespace multimedia
                 GenerateCode(parentNode.rightChild);
             }
             
+        }
+
+        public static long callength() //if this more than 7*length of code bad compresstion 
+        { //this number will increase if the gab between the 7 first number & another letter decrease
+            long res=24;
+            res+=(18*dict.Count());
+            for(int i=0;i<huffmanlist.Count;i++)
+            {
+                res += (huffmanlist[i].number * huffmanlist[i].code.Length);
+            }
+            return res;
         }
 
         public static string codeData(string input) //tested
@@ -450,6 +462,24 @@ namespace multimedia
             }
             return mylist;
         }
+        static string convertbinary(IList<int> input) //convert int list to binary code
+        { 
+            string res="";
+            for (int i = 0; i < input.Count; i++)
+            {
+
+                for (int j = 31; j >-1;j--)
+                {
+                    if ((input[i]&(i<<1))!=0)
+                        res+='1';
+                    else
+                        res+='0';
+                }
+            }
+
+            return res;
+        }
+
         static string deCoding(int[] input) //given code , output string
         {
             string res = "";
@@ -469,6 +499,26 @@ namespace multimedia
             }
             return res;
         }
+
+        static IList<int> convertint(string input) //convert code binary to int
+        {
+            IList<int> res = new List<int>();
+            int curr = 0,test=0;
+            for (int i = 0; i < input.Length; i++)
+            {
+                if (test == 32)
+                {
+                    test = 0;
+                    res.Add(curr);
+                    curr = 0;
+                }
+                if (input[i] == '1')
+                    curr = curr | 1;
+                curr = 1 << curr;
+            }
+            return res;
+        }
+
     }
 
 
