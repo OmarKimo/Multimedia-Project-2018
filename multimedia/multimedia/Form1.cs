@@ -15,7 +15,8 @@ namespace multimedia
     {
         public IList<string> generalChars;
         public IList<int> cntChars;
-        private string fileName;
+        private string fileNameWithPath;
+        private string fileNameWithoutPath;
         //public string tmpText;
         public Form1()
         {
@@ -23,7 +24,8 @@ namespace multimedia
             generalChars = new List<string>();
             cntChars = new List<int>();
             //tmpText = "";
-            fileName = "";
+            fileNameWithPath = "";
+            fileNameWithoutPath = "";
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -34,8 +36,8 @@ namespace multimedia
                 od.ShowDialog();
                 od.InitialDirectory = Directory.GetCurrentDirectory();
                 od.RestoreDirectory = true;
-                fileName = od.FileName;
-                string fileNameWithoutPath = fileName.Split('\\').Last();
+                fileNameWithPath = od.FileName;
+                fileNameWithoutPath = fileNameWithPath.Split('\\').Last();
                 NameOfFile.Text = fileNameWithoutPath;
             }
             catch (Exception ex)
@@ -69,12 +71,12 @@ namespace multimedia
         {
             try
             {
-                if (fileName == "")
+                if (fileNameWithPath == "")
                 {
                     MessageBox.Show("Choose a file to compress!");
                     return;
                 }
-                FileStream fr = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+                FileStream fr = new FileStream(fileNameWithPath, FileMode.Open, FileAccess.Read);
                 StreamReader sr = new StreamReader(fr);
                 string textToBeCompressed = sr.ReadToEnd();
                 fr.Close();
@@ -85,11 +87,11 @@ namespace multimedia
                 Huffman.build(generalChars,cntChars);
                 IList<string> binarizedChars = Huffman.codeData(textToBeCompressed);
 
-                FileStream file = new FileStream(fileName.Split('.').First() + ".bin", FileMode.Create);
+                FileStream file = new FileStream(fileNameWithoutPath.Split('.').First() + ".bin", FileMode.Create);
                 BinaryWriter binaryFile = new BinaryWriter(file);
                 foreach (string str in binarizedChars)
                 {
-                    binaryFile.Write(byte.Parse(str));
+                    binaryFile.Write(Convert.ToByte(str));
                 }
                 file.Close();
             }
