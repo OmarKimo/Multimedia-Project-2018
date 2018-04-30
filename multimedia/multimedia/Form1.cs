@@ -194,7 +194,7 @@ namespace multimedia
                 br.Close();
 
                 
-                string DecodedText = Huffman.DecodeData(textToBeUnCompressed);
+                string DecodedText = Huffman.DecodeData(textToBeUnCompressed,generalChars);
 
                 FileStream file = new FileStream(fileNameWithPath.Split('.').First() + "_1.bin", FileMode.Create);
                 StreamWriter DecodedFile = new StreamWriter(file);

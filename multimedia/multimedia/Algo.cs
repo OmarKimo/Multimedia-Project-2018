@@ -35,7 +35,9 @@ namespace multimedia
 
     class Huffman
     {
+        static public int numberofextend;
         static private IList<Node> huffmanlist; //include all letter with thier code
+        static private IList<int> dict;
         static public IList<Node> Gethuffman() //tested
         {//get copy of list
             IList<Node> newlist = new List<Node>();
@@ -50,9 +52,12 @@ namespace multimedia
         static public void build(IList<string> input, IList<int> array) //tested
         {//give them array of string & array of number of each string
             IList<Node> list = new List<Node>();
+            numberofextend = 0;
+            dict = new List<int>();
             huffmanlist = new List<Node>();
             for (int i = 0; i < array.Count; i++)
             {
+                dict.Add(array[i]);
                 list.Add(new Node(input[i], array[i]));
             }
 
@@ -117,8 +122,39 @@ namespace multimedia
         }
 
         public static string codeData(string input) //tested
-        {//given data ,output list of code
+        {
+            //given data ,output code
             string res = "";
+            int y = input.Length;
+            for (int i = 20; i > -1; i--)
+            {
+                if ((i << 1) < y)
+                {
+                    res += '1';
+                    y -= (i << 1);
+                }
+                else 
+                {
+                    res += '0';
+                }
+            }
+            for (int i = 0; i < dict.Count; i++)
+            {
+                int x = dict[i];
+                for (int j = 17; j > -1; j--)
+                {
+                    if ((j<< 1) < y)
+                    {
+                        res += '1';
+                        x -= (j<< 1);
+                    }
+                    else
+                    {
+                        res += '0';
+                    }
+                }
+            }
+            
             for (int i = 0; i < input.Length; i++)
             {
                 for (int j = 0; j < huffmanlist.Count; j++)
@@ -133,14 +169,34 @@ namespace multimedia
             return res;
         }
 
-        public static string DecodeData(string input) //tested
+        public static string DecodeData(string input,IList<string> GeneralDict) //tested
         {//given code ,output data
+            int x=0,length=0;
+            for (int i = 0; i < 21; i++)
+            {
+                length += ((21 - i) << (input[x] - '0'));
+                x++;
+            }
+            IList<int> mynum = new List<int>();
+            for (int i = 0; i < GeneralDict.Count; i++)
+            {
+                int y = 0;
+                for (int j = 0; j < 18; j++)
+                {
+                    y += ((17 - i) << (input[x] - '0'));
+                    x++;
+                }
+                mynum.Add(y);
+            }
+            Huffman.build(GeneralDict, mynum);
             string res = "";
             string curr = "";
-            for (int i = 0; i < input.Length; i++)
+            while(res.Length<length )
             {
+                if (x > input.Length)
+                    return res;
                 //add current code
-                curr += input[i];
+                curr += input[x++];
                 //search on current code on the list 
                 for (int j = 0; j < huffmanlist.Count; j++)
                 {
@@ -151,12 +207,16 @@ namespace multimedia
                         break;
                     }
                 }
+
             }
             return res;
         }
 
         public static void extendhuffman()//extend huffman code 
         {
+            if (numberofextend == null)
+                return;
+            numberofextend++;
             IList<Node> newlist = new List<Node>();
             //build new list
             for (int i = 0; i < huffmanlist.Count; i++)
