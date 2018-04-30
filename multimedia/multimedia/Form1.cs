@@ -51,7 +51,7 @@ namespace multimedia
             string[] x ={"a","b","c","d","e","f"};
             int[] arr={12,3,400,200,1,30};
             //test huffman 
-            Huffman.build(x, arr);
+            /*Huffman.build(x, arr);
             IList<Node> list = Huffman.Gethuffman(); //for debug
             string y = Huffman.codeData("abcd"); //000100001101
             y = Huffman.DecodeData(y); //check if return same value abcd
@@ -66,7 +66,7 @@ namespace multimedia
             //string f = arthmitc.decodeData(c[0], "c");
             //f=arthmitc.doubletobinary(arthmitc.Binarytodouble("01010001"));
             //double r=arthmitc.Binarytodouble("10010");
-            //f = arthmitc.doubletobinary(0.5);
+            //f = arthmitc.doubletobinary(0.5);*/
             
         }
 
@@ -88,15 +88,19 @@ namespace multimedia
                 Process(textToBeCompressed);
 
                 Huffman.build(generalChars,cntChars);
-                IList<string> binarizedChars = Huffman.codeData(textToBeCompressed);
+                string binarizedChars = Huffman.codeData(textToBeCompressed);
+                byte[] bytesFile = GetBytes(binarizedChars);
 
-                FileStream file = new FileStream(fileNameWithoutPath.Split('.').First() + ".bin", FileMode.Create);
+                FileStream file = new FileStream(fileNameWithPath.Split('.').First() + ".bin", FileMode.Create);
                 BinaryWriter binaryFile = new BinaryWriter(file);
-                foreach (string str in binarizedChars)
+                foreach (byte by in bytesFile)
                 {
-                    binaryFile.Write(Convert.ToByte(str));
+                    binaryFile.Write(by);
                 }
+
                 file.Close();
+                binaryFile.Close();
+                MessageBox.Show("Compression is done!");
             }
             catch (Exception ex)
             {
@@ -109,7 +113,7 @@ namespace multimedia
             string EncodedText = Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(text));
             string uniqueChars = String.Join("", EncodedText.Distinct());
             //tmpText += uniqueChars;
-            StreamWriter of = new StreamWriter("testFile.txt"); //Just for test
+            //StreamWriter of = new StreamWriter("testFile.txt"); //Just for test
 
             //Dictionary<char, int> dict = new Dictionary<char,int>();
             foreach (char ch in uniqueChars)
@@ -117,9 +121,9 @@ namespace multimedia
                 int count = text.Count(f => f == ch);
                 cntChars.Add(count);
                 generalChars.Add(ch.ToString());
-                of.Write(ch.ToString() + "\n");
+                //of.Write(ch.ToString() + "\n");
             }
-            of.Close();
+            //of.Close();
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -137,6 +141,15 @@ namespace multimedia
                 of.Write(ch.ToString() + "\n");
             }
             of.Close();*/
+        }
+
+        private byte[] GetBytes(string bitString)
+        {
+            return Enumerable.Range(0, bitString.Length / 8).
+                Select(pos => Convert.ToByte(
+                    bitString.Substring(pos * 8, 8),
+                    2)
+                ).ToArray();
         }
     }
 }
