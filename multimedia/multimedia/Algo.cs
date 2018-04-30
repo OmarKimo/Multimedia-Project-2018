@@ -116,16 +116,16 @@ namespace multimedia
             
         }
 
-        public static IList<string> codeData(string input) //tested
+        public static string codeData(string input) //tested
         {//given data ,output list of code
-            IList<string> res = new List<string>();
+            string res = "";
             for (int i = 0; i < input.Length; i++)
             {
                 for (int j = 0; j < huffmanlist.Count; j++)
                 {
                     if (input[i] == huffmanlist[j].data[0])
                     {
-                        res.Add(huffmanlist[j].code);
+                        res+=huffmanlist[j].code;
                         break;
                     }
                 }

@@ -50,13 +50,16 @@ namespace multimedia
         {
             string[] x ={"a","b","c","d","e","f"};
             int[] arr={12,3,400,200,1,30};
+            //test huffman 
             Huffman.build(x, arr);
             IList<Node> list = Huffman.Gethuffman(); //for debug
-            IList<string> y = Huffman.codeData("abcd"); //000100001101
+            string y = Huffman.codeData("abcd"); //000100001101
+            y = Huffman.DecodeData(y); //check if return same value abcd
             string z = Huffman.DecodeData("010000101");//bdb
             Huffman.extendhuffman();
             list = Huffman.Gethuffman();
             bool test = list[0] == null;
+            //test arthmitic
             //arthmitc.Main(x, arr);
             //letter y=arthmitc.arthmitclist[0];
             //IList<Double> c=arthmitc.codeData("abc");
