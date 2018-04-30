@@ -11,7 +11,6 @@ using System.Windows.Forms;
  
 namespace multimedia
 {
-    
     public partial class Form1 : Form
     {
         public IList<string> generalChars;
@@ -72,7 +71,7 @@ namespace multimedia
             {
                 if (fileName == "")
                 {
-                    //MessageBox.Show("Choose a file to compress!");
+                    MessageBox.Show("Choose a file to compress!");
                     return;
                 }
                 FileStream fr = new FileStream(fileName, FileMode.Open, FileAccess.Read);
@@ -80,9 +79,19 @@ namespace multimedia
                 string textToBeCompressed = sr.ReadToEnd();
                 fr.Close();
                 sr.Close();
+
                 Process(textToBeCompressed);
+
                 Huffman.build(generalChars,cntChars);
-                IList<string> binarizedText = Huffman.codeData(textToBeCompressed);
+                IList<string> binarizedChars = Huffman.codeData(textToBeCompressed);
+
+                FileStream file = new FileStream(fileName.Split('.').First() + ".bin", FileMode.Create);
+                BinaryWriter binaryFile = new BinaryWriter(file);
+                foreach (string str in binarizedChars)
+                {
+                    binaryFile.Write(byte.Parse(str));
+                }
+                file.Close();
             }
             catch (Exception ex)
             {
