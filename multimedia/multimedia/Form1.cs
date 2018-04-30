@@ -17,15 +17,23 @@ namespace multimedia
         public IList<int> cntChars;
         private string fileNameWithPath;
         private string fileNameWithoutPath;
-        //public string tmpText;
+        //private string tmpText;
+        //private int mxCnt;
+        private IList<string> paths;
         public Form1()
         {
             InitializeComponent();
             generalChars = new List<string>();
             cntChars = new List<int>();
             //tmpText = "";
+            //mxCnt = 0;
             fileNameWithPath = "";
             fileNameWithoutPath = "";
+            paths = new List<string>();
+            for (int i = 0; i < 20; i++)
+            {
+                paths.Add("D:\\Major & Interests\\Github Repositories & My Projects\\Multimedia-Project-2018\\DataSet\\DataSet_" + (i + 1).ToString() + ".tsv");
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -115,12 +123,21 @@ namespace multimedia
             //tmpText += uniqueChars;
             //StreamWriter of = new StreamWriter("testFile.txt"); //Just for test
 
-            //Dictionary<char, int> dict = new Dictionary<char,int>();
+            Dictionary<char, int> dict = new Dictionary<char,int>();
             foreach (char ch in uniqueChars)
             {
                 int count = text.Count(f => f == ch);
                 cntChars.Add(count);
                 generalChars.Add(ch.ToString());
+                /*if (dict.ContainsKey(ch))
+                {
+                    dict[ch] += count;
+                }
+                else
+                {
+                    dict[ch] = count;
+                }
+                mxCnt += (dict[ch] > mxCnt) ? dict[ch] - mxCnt : 0;*/
                 //of.Write(ch.ToString() + "\n");
             }
             //of.Close();
@@ -130,8 +147,15 @@ namespace multimedia
         {
             /*for (int i = 0; i < 20; i++)
             {
-                button1.PerformClick();
+                FileStream fr = new FileStream(paths[i], FileMode.Open, FileAccess.Read);
+                StreamReader sr = new StreamReader(fr);
+                string textToBeCompressed = sr.ReadToEnd();
+                fr.Close();
+                sr.Close();
+
+                Process(textToBeCompressed);
             }
+            MessageBox.Show(mxCnt.ToString());
             tmpText = String.Join("", tmpText.Distinct());
             StreamWriter of = new StreamWriter("lzw Dictionary.txt"); //Just for test
 
@@ -150,6 +174,40 @@ namespace multimedia
                     bitString.Substring(pos * 8, 8),
                     2)
                 ).ToArray();
+        }
+
+        private void unCompress_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (fileNameWithPath == "" || fileNameWithPath.Split('.').Last() != "bin")
+                {
+                    MessageBox.Show("Choose a proper binary file (.bin) to uncompress!");
+                    return;
+                }
+
+                FileStream fr = new FileStream(fileNameWithPath, FileMode.Open, FileAccess.Read);
+                BinaryReader br = new BinaryReader(fr);
+                byte[] binText = br.ReadBytes(Convert.ToInt32(fr.Length));
+                string textToBeUnCompressed = Convert.ToBase64String(binText);
+                fr.Close();
+                br.Close();
+
+                
+                string DecodedText = Huffman.DecodeData(textToBeUnCompressed);
+
+                FileStream file = new FileStream(fileNameWithPath.Split('.').First() + "_1.bin", FileMode.Create);
+                StreamWriter DecodedFile = new StreamWriter(file);
+                DecodedFile.Write(DecodedText);
+
+                file.Close();
+                DecodedFile.Close();
+                MessageBox.Show("Uncompression is done!");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error!!" + ex);
+            }
         }
     }
 }

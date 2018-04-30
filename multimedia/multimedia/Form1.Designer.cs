@@ -55,6 +55,7 @@
             this.unCompress.TabIndex = 1;
             this.unCompress.Text = "unCompress";
             this.unCompress.UseVisualStyleBackColor = true;
+            this.unCompress.Click += new System.EventHandler(this.unCompress_Click);
             // 
             // button1
             // 
