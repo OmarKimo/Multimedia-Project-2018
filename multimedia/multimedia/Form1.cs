@@ -16,6 +16,7 @@ namespace multimedia
         public IList<string> generalChars;
         private string fileNameWithPath;
         private string fileNameWithoutPath;
+        private string EncodedText;
         private string tmpText;
         private IList<string> paths;
         private Dictionary<string, int> allCharsDict;
@@ -33,6 +34,7 @@ namespace multimedia
             }
             allCharsDict = new Dictionary<string, int>();
             init(allCharsDict);
+            EncodedText = "";
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -119,9 +121,12 @@ namespace multimedia
 
                 Process(textToBeCompressed);
 
-                Huffman.build(allCharsDict);
-                Huffman.extendhuffman();
-                string binarizedChars = Huffman.codeData(textToBeCompressed);
+                //Huffman.build(allCharsDict);
+                //Huffman.extendhuffman();
+                lzw.Main(allCharsDict.Keys.ToList());
+                //string binarizedChars = Huffman.codeData(EncodedText);
+                IList<int> binarized = lzw.Coding(EncodedText);
+                string binarizedChars = lzw.convertbinary(binarized);
                 byte[] bytesFile = GetBytes(binarizedChars);
 
                 FileStream file = new FileStream(fileNameWithPath.Split('.').First() + ".bin", FileMode.Create);
@@ -143,7 +148,7 @@ namespace multimedia
 
         private void Process(string text)
         {
-            string EncodedText = Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(text));
+            EncodedText = Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(text));
             string uniqueChars = String.Join("", EncodedText.Distinct());
             tmpText += uniqueChars;
             //StreamWriter of = new StreamWriter("testFile.txt"); //Just for test

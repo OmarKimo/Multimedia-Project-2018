@@ -507,10 +507,10 @@ namespace multimedia
 
     class lzw
     {
-        static public IList<string> LetterDict;
+        public static IList<string> LetterDict;
         //static private int Max; handle in input
 
-        static void Main(IList<string> input) //give them array of string & array of number of each string
+        public static void Main(IList<string> input) //give them array of string & array of number of each string
         {
             //fill letterdict with all letter in the data set
             LetterDict = new List<string>();
@@ -523,7 +523,7 @@ namespace multimedia
 
 
 
-        static IList<int> Coding(string input) //given string , output code
+        public static IList<int> Coding(string input) //given string , output code
         {
             IList<int> mylist=new List<int>();
             IList<string> Dict=new List<string>();
@@ -558,7 +558,7 @@ namespace multimedia
             }
             return mylist;
         }
-        static string convertbinary(IList<int> input) //convert int list to binary code
+        public static string convertbinary(IList<int> input) //convert int list to binary code
         { 
             string res="";
             for (int i = 0; i < input.Count; i++)
@@ -576,7 +576,7 @@ namespace multimedia
             return res;
         }
 
-        static string deCoding(int[] input) //given code , output string
+        public static string deCoding(int[] input) //given code , output string
         {
             string res = "";
             IList<string> Dict = new List<string>();
@@ -596,7 +596,7 @@ namespace multimedia
             return res;
         }
 
-        static IList<int> convertint(string input) //convert code binary to int
+        public static IList<int> convertint(string input) //convert code binary to int
         {
             IList<int> res = new List<int>();
             int curr = 0,test=0;
