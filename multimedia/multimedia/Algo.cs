@@ -553,6 +553,7 @@ namespace multimedia
                     string temp = "";
                     for (int j = 1; j < curr.Length; j++)
                         temp += curr[j];
+                    curr = temp;
                 }
                 
             }
@@ -576,7 +577,7 @@ namespace multimedia
             return res;
         }
 
-        public static string deCoding(int[] input) //given code , output string
+        public static string deCoding(IList<int> input) //given code , output string
         {
             string res = "";
             IList<string> Dict = new List<string>();
@@ -587,7 +588,7 @@ namespace multimedia
             }
             string last = Dict[input[0]];
             res+=last;
-            for (int i = 1; i < input.Length; i++)
+            for (int i = 1; i < input.Count; i++)
             {
                 res += Dict[input[i]];
                 Dict.Add(last + Dict[input[i]][0]);
