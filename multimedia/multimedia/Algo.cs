@@ -309,6 +309,7 @@ namespace multimedia
     {
         static public IList<letter> arthmitclist;
         static public int number;
+
         public static void Main(IList<string> input, IList<int> array) //given array of string & array of number of each string
         {
             arthmitclist = new List<letter>();
@@ -522,7 +523,6 @@ namespace multimedia
         }
 
 
-
         public static IList<int> Coding(string input) //given string , output code
         {
             IList<int> mylist=new List<int>();
@@ -537,6 +537,7 @@ namespace multimedia
             {
                 bool test = true;
                 curr += input[i];
+                
                 for (int j = 0; j < Dict.Count; j++)
                 {
                     if (curr == Dict[j])
@@ -549,16 +550,22 @@ namespace multimedia
                 if (test) 
                 {
                     mylist.Add(last);
-                    Dict.Add(curr);
+                    if (Dict.Count < 1000000)
+                        Dict.Add(curr);
                     string temp = "";
-                    for (int j = 1; j < curr.Length; j++)
-                        temp += curr[j];
+                    int o = 0;
+                    string mynew = Dict[last];
+                    while (mynew[o] == curr[o])
+                        o++;
+                    while (o < curr.Length)
+                        temp += curr[o++];
                     curr = temp;
                 }
                 
             }
             return mylist;
         }
+
         public static string convertbinary(IList<int> input) //convert int list to binary code
         { 
             string res="";
@@ -591,8 +598,12 @@ namespace multimedia
             for (int i = 1; i < input.Count; i++)
             {
                 res += Dict[input[i]];
-                Dict.Add(last + Dict[input[i]][0]);
-                last = Dict[input[i]];
+                if (Dict.Count < 1000000)
+                {
+                    Dict.Add(last + Dict[input[i]][0]);
+                    last = Dict[input[i]];
+                }
+                    
             }
             return res;
         }
