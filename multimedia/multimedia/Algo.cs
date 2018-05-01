@@ -50,16 +50,18 @@ namespace multimedia
             } 
             return newlist;
         }
-        static public void build(IList<string> input, IList<int> array) //tested
+        static public void build(Dictionary<string, int> input/*IList<string> input, IList<int> array*/) //tested
         {//give them array of string & array of number of each string
             IList<Node> list = new List<Node>();
             numberofextend = 0;
             dict = new List<int>();
             huffmanlist = new List<Node>();
-            for (int i = 0; i < array.Count; i++)
+            for (int i = 0; i < input.Count; i++)
             {
-                dict.Add(array[i]);
-                list.Add(new Node(input[i], array[i]));
+                int value = input.ToList()[i].Value; //array[i]
+                string key = input.ToList()[i].Key; //input[i]
+                dict.Add(value);
+                list.Add(new Node(key, value));
             }
 
             //build the tree
@@ -187,17 +189,21 @@ namespace multimedia
             {
                 length |= ((input[x++] - '0')<<(21 - i));
             }
-            IList<int> mynum = new List<int>();
+            //IList<int> mynum = new List<int>();
+            Dictionary<string, int> GeneralDictwithMynum = new Dictionary<string, int>();
             for (int i = 0; i < GeneralDict.Count; i++)
             {
+                GeneralDictwithMynum.Add(GeneralDict[i], 0);
                 int y = 0;
                 for (int j = 0; j < 18; j++)
                 {
                     y |=( ( (input[x++] - '0') << (17 - j)));
                 }
-                mynum.Add(y);
+                GeneralDictwithMynum[GeneralDict[i]] = y;
+                //mynum.Add(y);
             }
-            Huffman.build(GeneralDict, mynum);
+            //Huffman.build(GeneralDict, mynum);
+            Huffman.build(GeneralDictwithMynum);
             string res = "";
             string curr = "";
             while(res.Length<length )
