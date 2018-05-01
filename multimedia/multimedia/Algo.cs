@@ -152,6 +152,7 @@ namespace multimedia
         {
             //given data ,output code
             string res = "";
+            /*
             int y = input.Length;
             for (int i = 20; i > -1; i--)
             {
@@ -162,7 +163,7 @@ namespace multimedia
                 }
                 else 
                     res += '0';
-            }
+            }*/
             for (int i = 0; i < dict.Count; i++)
             {
                 int x = dict[i];
@@ -197,10 +198,11 @@ namespace multimedia
         public static string DecodeData(string input,IList<string> GeneralDict) //tested
         {//given code ,output data
             int x=0,length=0;
+            /*
             for (int i = 0; i < 21; i++)
             {
                 length |= ((input[x++] - '0')<<(21 - i));
-            }
+            }*/
             //IList<int> mynum = new List<int>();
             Dictionary<string, int> GeneralDictwithMynum = new Dictionary<string, int>();
             for (int i = 0; i < GeneralDict.Count; i++)
@@ -212,12 +214,12 @@ namespace multimedia
                     y |=( ( (input[x++] - '0') << (17 - j)));
                 }
                 GeneralDictwithMynum[GeneralDict[i]] = y;
+                length += y;
                 //mynum.Add(y);
             }
             //Huffman.build(GeneralDict, mynum);
             Huffman.build(GeneralDictwithMynum);
-            string res = "";
-            string curr = "";
+            string res = "",curr = "";
             while(res.Length<length )
             {
                 if (x > input.Length)
@@ -428,7 +430,7 @@ namespace multimedia
                         up = artlist[j].upper;
                         down = artlist[j].lower;
                         double ratio = up - down;
-                        if ((artlist[j].data[0])==end) //end of coding  need to change
+                        if (up-down<0.000000001) //end of coding  need to change
                         {
                             list.Add((up + down) / 2.0);
                             up = 1;

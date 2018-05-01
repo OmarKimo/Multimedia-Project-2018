@@ -126,10 +126,15 @@ namespace multimedia
 
                 //Huffman.build(allCharsDict);
                 //Huffman.extendhuffman();
-                lzw.Main(allCharsDict.Keys.ToList());
                 //string binarizedChars = Huffman.codeData(EncodedText);
-                IList<int> binarized = lzw.Coding(EncodedText);
-                string binarizedChars = lzw.convertbinary(binarized);
+
+                //lzw.Main(allCharsDict.Keys.ToList());
+                //IList<int> binarized = lzw.Coding(EncodedText);
+                //string binarizedChars = lzw.convertbinary(binarized);
+
+                arthmitc.Main(allCharsDict.Keys.ToList(), allCharsDict.Values.ToList());
+                string binarizedChars = arthmitc.buildbinary(EncodedText, allCharsDict.Values.ToList());
+
                 byte[] bytesFile = GetBytes(binarizedChars);
 
                 FileStream file = new FileStream(fileNameWithPath.Split('.').First() + ".bin", FileMode.Create);
@@ -226,8 +231,10 @@ namespace multimedia
                 br.Close();
                 fr.Close();
 
+                //string DecodedText = Huffman.DecodeData(textToBeUnCompressed,generalChars);
 
-                string DecodedText = Huffman.DecodeData(textToBeUnCompressed,generalChars);
+                arthmitc.Main(allCharsDict.Keys.ToList(), allCharsDict.Values.ToList());
+                string DecodedText = arthmitc.buildstring(textToBeUnCompressed, allCharsDict.Keys.ToList());
 
                 FileStream file = new FileStream(fileNameWithPath.Split('.').First() + "_1.txt", FileMode.Create);
                 StreamWriter DecodedFile = new StreamWriter(file);
