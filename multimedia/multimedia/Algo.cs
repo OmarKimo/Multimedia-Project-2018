@@ -572,7 +572,7 @@ namespace multimedia
             for (int i = 0; i < input.Count; i++)
             {
 
-                for (int j = 16; j >-1;j--)
+                for (int j = 15; j >-1;j--)
                 {
                     if ((input[i]&(1<<j))!=0)
                         res+='1';
@@ -614,7 +614,7 @@ namespace multimedia
             int curr = 0,test=0;
             for (int i = 0; i < input.Length; i++)
             {
-                if (test == 17)
+                if (test == 16)
                 {
                     test = 0;
                     res.Add(curr);
