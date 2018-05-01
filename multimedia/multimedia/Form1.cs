@@ -14,17 +14,15 @@ namespace multimedia
     public partial class Form1 : Form
     {
         public IList<string> generalChars;
-        public IList<int> cntChars;
         private string fileNameWithPath;
         private string fileNameWithoutPath;
         private string tmpText;
         private IList<string> paths;
-        private IList<string> allChars;
+        private Dictionary<string, int> allCharsDict;
         public Form1()
         {
             InitializeComponent();
             generalChars = new List<string>();
-            cntChars = new List<int>();
             tmpText = "";
             fileNameWithPath = "";
             fileNameWithoutPath = "";
@@ -33,8 +31,8 @@ namespace multimedia
             {
                 paths.Add("D:\\Major & Interests\\Github Repositories & My Projects\\Multimedia-Project-2018\\DataSet\\DataSet_" + (i + 1).ToString() + ".tsv");
             }
-            allChars = new List<string>();
-            init(allChars);
+            allCharsDict = new Dictionary<string, int>();
+            init(allCharsDict);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -80,17 +78,27 @@ namespace multimedia
             
         }
 
-        private void init(IList<string> chars)
+        private void init(Dictionary<string, int> chars)
         {
-            FileStream fr = new FileStream("D:\\Computer department\\cairo university\\Assembly game\\Multimedia-Project-2018\\lzw Dictionary.txt", FileMode.Open, FileAccess.Read);
-            StreamReader sr = new StreamReader(fr);
-            string txt = sr.ReadToEnd();
-            fr.Close();
-            sr.Close();
+            string txt = "";
+            for (int i = 0; i < 20; i++)
+            {
+                FileStream fr = new FileStream(paths[i], FileMode.Open, FileAccess.Read);
+                StreamReader sr = new StreamReader(fr);
+                txt += sr.ReadToEnd();
+                txt = String.Join("", txt.Distinct());
+                sr.Close();
+                fr.Close();
+            }
+            FileStream file = new FileStream("all Unique Chars.txt", FileMode.Create);
+            StreamWriter of = new StreamWriter(file);
+            of.Write(txt);
             foreach (char ch in txt)
             {
-                allChars.Add(ch.ToString());
+                allCharsDict.Add(ch.ToString(), 0);
             }
+            of.Close();
+            file.Close();
         }
 
         private void Compress_Click(object sender, EventArgs e)
@@ -105,12 +113,12 @@ namespace multimedia
                 FileStream fr = new FileStream(fileNameWithPath, FileMode.Open, FileAccess.Read);
                 StreamReader sr = new StreamReader(fr);
                 string textToBeCompressed = sr.ReadToEnd();
-                fr.Close();
                 sr.Close();
+                fr.Close();
 
                 Process(textToBeCompressed);
 
-                Huffman.build(generalChars,cntChars);
+                Huffman.build(allCharsDict);
                 Huffman.extendhuffman();
                 string binarizedChars = Huffman.codeData(textToBeCompressed);
                 byte[] bytesFile = GetBytes(binarizedChars);
@@ -143,8 +151,8 @@ namespace multimedia
             foreach (char ch in uniqueChars)
             {
                 int count = text.Count(f => f == ch);
-                cntChars.Add(count);
-                generalChars.Add(ch.ToString());
+                allCharsDict[ch.ToString()] = count;
+                //generalChars.Add(ch.ToString());
                 /*if (dict.ContainsKey(ch))
                 {
                     dict[ch] += count;
@@ -206,8 +214,8 @@ namespace multimedia
                 BinaryReader br = new BinaryReader(fr);
                 byte[] binText = br.ReadBytes(Convert.ToInt32(fr.Length));
                 string textToBeUnCompressed = Convert.ToBase64String(binText);
-                fr.Close();
                 br.Close();
+                fr.Close();
 
 
                 string DecodedText = Huffman.DecodeData(textToBeUnCompressed,generalChars);
