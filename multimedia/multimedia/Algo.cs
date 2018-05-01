@@ -81,7 +81,19 @@ namespace multimedia
             {
                 Node parentNode1 = stack.Pop();
                 GenerateCode(parentNode1);
-            }  
+            }
+            for (int i = 0; i < huffmanlist.Count; i++)
+            {
+                for (int j = i + 1; j < huffmanlist.Count; j++)
+                {
+                    if (huffmanlist[i].number < huffmanlist[j].number)
+                    {
+                        Node tempNode = huffmanlist[j];
+                        huffmanlist[j] = huffmanlist[i];
+                        huffmanlist[i] = tempNode;
+                    }
+                }
+            }
 
         }
 
@@ -263,18 +275,18 @@ namespace multimedia
 
 
             //for debug
-            //for (int i = 0; i < huffmanlist.Count; i++)
-            //{
-            //    for (int j = i + 1; j < huffmanlist.Count; j++)
-            //    {
-            //        if (huffmanlist[i].number < huffmanlist[j].number)
-            //        {
-            //            Node tempNode = huffmanlist[j];
-            //            huffmanlist[j] = huffmanlist[i];
-            //            huffmanlist[i] = tempNode;
-            //        }
-            //    }
-            //}
+            for (int i = 0; i < huffmanlist.Count; i++)
+            {
+                for (int j = i + 1; j < huffmanlist.Count; j++)
+                {
+                    if (huffmanlist[i].number < huffmanlist[j].number)
+                    {
+                        Node tempNode = huffmanlist[j];
+                        huffmanlist[j] = huffmanlist[i];
+                        huffmanlist[i] = tempNode;
+                    }
+                }
+            }
 
         }
     }
@@ -296,22 +308,103 @@ namespace multimedia
     class arthmitc
     {
         static public IList<letter> arthmitclist;
-        public static void Main(string[] input, int[] array) //given array of string & array of number of each string
+        static public int number;
+        public static void Main(IList<string> input, IList<int> array) //given array of string & array of number of each string
         {
             arthmitclist = new List<letter>();
-            long sum = 0;
-            for (int i = 0; i < array.Length; i++)
+            int sum = 0;
+            for (int i = 0; i < array.Count; i++)
             {
                 sum += array[i];
             }
+            number = sum;
             double curr = 0.0;
-            for (int i = 0; i < array.Length; i++)
+            for (int i = 0; i < array.Count; i++)
             {
                 arthmitclist.Add(new letter(input[i] ,(curr + array[i]) / sum, curr / sum));
                 curr += array[i];
 
             }
         }
+
+        public static string buildbinary(string input,IList<int> number)
+        {
+            string res="";
+            IList<Double> x = new List<Double>();
+            for (int i = 0; i < arthmitclist.Count; i++)
+            {
+                if (arthmitclist[i].data[0] == input[input.Length - 1])
+                {
+                    for (int j = 7; j > -1; j--)
+                    {
+                        if (i > (1 << j))
+                        {
+                            res += '1';
+                            i -= (1 << j);
+                        }
+                        else
+                            res += '0';
+                    }
+                    break;
+                }
+            }
+            for (int i = 0; i < number.Count; i++)
+            {
+                int u = number[i];
+                for (int j = 17; j > -1; j--)
+                {
+                    if (((1 << j) & u) != 0)
+                    {
+                        res += '1';
+                        u ^= (1 << j);
+                    }
+                    else
+                    {
+                        res += '0';
+                    }
+                }
+            }
+            x = codeData(input);
+            for (int i = 0; i < x.Count; i++)
+            {
+                res += arthmitc.doubletobinary(x[i]);
+            }
+            return res;
+        }
+
+        public static string buildstring(string input,IList<string> gene)
+        {
+            string res = "";
+            int x = 0;
+            int end = 0;
+            for (; x < 8; x++)
+            {
+                end += (input[x] - '0') << (7 - x);
+            }
+            IList<int> mynum = new List<int>();
+            for (int i = 0; i < gene.Count; i++)
+            {
+                int y = 0;
+                for (int j = 0; j < 18; j++)
+                {
+                    y |= (((input[x++] - '0') << (17 - j)));
+                }
+                mynum.Add(y);
+            }
+            arthmitc.Main(gene, mynum);
+
+            string send = arthmitclist[end].data;
+            
+            while (x < input.Length)
+            {
+                string curr = "";
+                for (int i = 0; i < 64; i++)
+                    curr += input[x++];
+                res += arthmitc.Binarytodouble(curr);
+            }
+            return res;
+        }
+
         public static IList<double> codeData(string input) //given data ,output code
         {
             IList<double> list = new List<double>();
@@ -321,7 +414,7 @@ namespace multimedia
                 artlist.Add(new letter(arthmitclist[i].data,arthmitclist[i].upper,arthmitclist[i].lower));
             }
             double up=1, down=0;
-            string end = input[input.Length - 1]+""; //need to change
+            char end = input[input.Length - 1]; //need to change
             string curr = "";
             for (int i = 0; i < input.Length; i++)
             {
@@ -334,7 +427,7 @@ namespace multimedia
                         up = artlist[j].upper;
                         down = artlist[j].lower;
                         double ratio = up - down;
-                        if ((artlist[j].data+"")==end) //end of coding  need to change
+                        if ((artlist[j].data[0])==end) //end of coding  need to change
                         {
                             list.Add((up + down) / 2.0);
                             up = 1;

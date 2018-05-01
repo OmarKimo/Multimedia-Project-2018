@@ -75,15 +75,12 @@ namespace multimedia
             //f=arthmitc.doubletobinary(arthmitc.Binarytodouble("01010001"));
             //double r=arthmitc.Binarytodouble("10010");
             //f = arthmitc.doubletobinary(0.5);
-            double f = 0.5;
-            double g = 0.25;
-            string s = arthmitc.doubletobinary(f);
-            s = arthmitc.doubletobinary(g);
-
+           
         }
 
         private void init(Dictionary<string, int> chars)
         {
+
             string txt = "";
             for (int i = 0; i < 20; i++)
             {
