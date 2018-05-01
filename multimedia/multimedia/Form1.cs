@@ -30,7 +30,10 @@ namespace multimedia
             paths = new List<string>();
             for (int i = 0; i < 20; i++)
             {
-                paths.Add("D:\\Major & Interests\\Github Repositories & My Projects\\Multimedia-Project-2018\\DataSet\\DataSet_" + (i + 1).ToString() + ".tsv");
+                //paths.Add("D:\\Major & Interests\\Github Repositories & My Projects\\Multimedia-Project-2018\\DataSet\\DataSet_" + (i + 1).ToString() + ".tsv");
+
+                paths.Add("D:\\Computer department\\cairo university\\Assembly game\\Multimedia-Project-2018\\DataSet\\DataSet_" + (i + 1).ToString() + ".tsv");
+
             }
             allCharsDict = new Dictionary<string, int>();
             init(allCharsDict);

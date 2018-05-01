@@ -533,11 +533,12 @@ namespace multimedia
             }
             string curr="";
             int last = 0;
+            bool test = false;
             for (int i = 0; i < input.Length; i++)
             {
-                bool test = true;
-                curr += input[i];
-                
+                if(!test)
+                    curr += input[i];
+                test = true;
                 for (int j = 0; j < Dict.Count; j++)
                 {
                     if (curr == Dict[j])
@@ -550,13 +551,10 @@ namespace multimedia
                 if (test) 
                 {
                     mylist.Add(last);
-                    if (Dict.Count < 1000000)
+                    if (Dict.Count < 100000)
                         Dict.Add(curr);
                     string temp = "";
-                    int o = 0;
-                    string mynew = Dict[last];
-                    while (mynew[o] == curr[o])
-                        o++;
+                    int o = Dict[last].Length;
                     while (o < curr.Length)
                         temp += curr[o++];
                     curr = temp;
@@ -572,9 +570,9 @@ namespace multimedia
             for (int i = 0; i < input.Count; i++)
             {
 
-                for (int j = 31; j >-1;j--)
+                for (int j = 16; j >-1;j--)
                 {
-                    if ((input[i]&(1<<i))!=0)
+                    if ((input[i]&(1<<j))!=0)
                         res+='1';
                     else
                         res+='0';
@@ -598,7 +596,7 @@ namespace multimedia
             for (int i = 1; i < input.Count; i++)
             {
                 res += Dict[input[i]];
-                if (Dict.Count < 1000000)
+                if (Dict.Count < 100000)
                 {
                     Dict.Add(last + Dict[input[i]][0]);
                     last = Dict[input[i]];
@@ -614,7 +612,7 @@ namespace multimedia
             int curr = 0,test=0;
             for (int i = 0; i < input.Length; i++)
             {
-                if (test == 32)
+                if (test == 17)
                 {
                     test = 0;
                     res.Add(curr);
