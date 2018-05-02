@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
- 
+
 namespace multimedia
 {
     public partial class Form1 : Form
@@ -80,7 +80,7 @@ namespace multimedia
             //f=arthmitc.doubletobinary(arthmitc.Binarytodouble("01010001"));
             //double r=arthmitc.Binarytodouble("10010");
             //f = arthmitc.doubletobinary(0.5);
-           
+
         }
 
         private void init(Dictionary<string, int> chars)
@@ -116,33 +116,48 @@ namespace multimedia
                     MessageBox.Show("Choose a file to compress!");
                     return;
                 }
+
                 FileStream fr = new FileStream(fileNameWithPath, FileMode.Open, FileAccess.Read);
-                StreamReader sr = new StreamReader(fr);
+                StreamReader sr = new StreamReader(fr, Encoding.UTF8);
+
                 string textToBeCompressed = sr.ReadToEnd();
                 sr.Close();
                 fr.Close();
 
                 Process(textToBeCompressed);
 
-                //Huffman.build(allCharsDict);
+                Huffman.build(allCharsDict);
                 //Huffman.extendhuffman();
-                //string binarizedChars = Huffman.codeData(EncodedText);
+                string binarizedChars = Huffman.codeData(textToBeCompressed);
 
                 //lzw.Main(allCharsDict.Keys.ToList());
-                //IList<int> binarized = lzw.Coding(EncodedText);
+                //IList<int> binarized = lzw.Coding(textToBeCompressed);
                 //string binarizedChars = lzw.convertbinary(binarized);
+                
+                //arthmitc.Main(allCharsDict.Keys.ToList(), allCharsDict.Values.ToList());
+                //string binarizedChars = arthmitc.buildbinary(textToBeCompressed, allCharsDict.Values.ToList());
 
-                arthmitc.Main(allCharsDict.Keys.ToList(), allCharsDict.Values.ToList());
-                string binarizedChars = arthmitc.buildbinary(EncodedText, allCharsDict.Values.ToList());
-
-                byte[] bytesFile = GetBytes(binarizedChars);
 
                 FileStream file = new FileStream(fileNameWithPath.Split('.').First() + ".bin", FileMode.Create);
-                BinaryWriter binaryFile = new BinaryWriter(file);
-                foreach (byte by in bytesFile)
+                BinaryWriter binaryFile = new BinaryWriter(file, Encoding.UTF8);
+
+                string s = "";
+                for (int i = 1; i <= binarizedChars.Length; i++)
                 {
-                    binaryFile.Write(by);
+                    s += binarizedChars[i - 1];
+                    if (i % 8 == 0)
+                    {
+                        binaryFile.Write(Convert.ToByte(s, 2));
+                        s = "";
+                    }
                 }
+                if (s != "")
+                {
+                    binaryFile.Write(Convert.ToByte(s, 2));
+                    s = "";
+                }
+
+                //byte[] bytesFile = GetBytes(binarizedChars);
 
                 file.Close();
                 binaryFile.Close();
@@ -161,7 +176,7 @@ namespace multimedia
             tmpText += uniqueChars;
             //StreamWriter of = new StreamWriter("testFile.txt"); //Just for test
 
-            Dictionary<char, int> dict = new Dictionary<char,int>();
+            //Dictionary<string, int> dict = new Dictionary<string,int>();
             foreach (char ch in uniqueChars)
             {
                 int count = text.Count(f => f == ch);
@@ -225,16 +240,51 @@ namespace multimedia
                 }
 
                 FileStream fr = new FileStream(fileNameWithPath, FileMode.Open, FileAccess.Read);
-                BinaryReader br = new BinaryReader(fr);
-                byte[] binText = br.ReadBytes(Convert.ToInt32(fr.Length));
-                string textToBeUnCompressed = Convert.ToBase64String(binText);
-                br.Close();
-                fr.Close();
+                BinaryReader br = new BinaryReader(fr,Encoding.UTF8);
+                IList<byte> binText = new List<byte>();
+                while(true){
+                    try
+                    {
+                        binText.Add(br.ReadByte());
+                    }
+                    catch (Exception ex)
+                    {
+                        br.Close();
+                        fr.Close();
+                        //binText.RemoveAt(binText.Count - 1);
+                        break;
+                    }
+                }
+                IList<char> Text = new List<char>();
+                for (int i = 0; i < binText.Count; i++)
+                {
+                    string s = Convert.ToString(binText[i],2);
+                    string add = "";
+                    for (int j = 0; j < s.Length; j++)
+                    {
+                        add += s[j];
+                    }
+                    for (int j = 0; j < 8 - s.Length; j++)
+                    {
+                        Text.Add('0');
+                    }
+                    for (int j = 0; j <add.Length; j++)
+                    {
+                        Text.Add(add[j]);
+                    }
+                }
 
-                //string DecodedText = Huffman.DecodeData(textToBeUnCompressed,generalChars);
 
-                arthmitc.Main(allCharsDict.Keys.ToList(), allCharsDict.Values.ToList());
-                string DecodedText = arthmitc.buildstring(textToBeUnCompressed, allCharsDict.Keys.ToList());
+
+
+                //lzw.Main(allCharsDict.Keys.ToList());
+                //IList<int> mynum = new List<int>();
+                //string DecodedText = lzw.deCoding(lzw.convertint(string.Join("", Text.ToArray())));
+
+                string DecodedText = Huffman.DecodeData(string.Join("", Text.ToArray()), generalChars);
+
+                //arthmitc.Main(allCharsDict.Keys.ToList(), allCharsDict.Values.ToList());
+                //string DecodedText = arthmitc.buildstring(string.Join("",Text.ToArray()), allCharsDict.Keys.ToList());
 
                 FileStream file = new FileStream(fileNameWithPath.Split('.').First() + "_1.txt", FileMode.Create);
                 StreamWriter DecodedFile = new StreamWriter(file);

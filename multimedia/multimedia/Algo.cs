@@ -395,15 +395,14 @@ namespace multimedia
                 mynum.Add(y);
             }
             arthmitc.Main(gene, mynum);
-
-            string send = arthmitclist[end].data;
+            //string send = arthmitclist[end].data;
             
             while (x < input.Length)
             {
                 string curr = "";
                 for (int i = 0; i < 64; i++)
                     curr += input[x++];
-                res += arthmitc.Binarytodouble(curr);
+                res +=arthmitc.decodeData( arthmitc.Binarytodouble(curr));
             }
             return res;
         }
@@ -430,7 +429,7 @@ namespace multimedia
                         up = artlist[j].upper;
                         down = artlist[j].lower;
                         double ratio = up - down;
-                        if (up-down<0.000000001) //end of coding  need to change
+                        if (ratio<0.000000001) //end of coding  need to change
                         {
                             list.Add((up + down) / 2.0);
                             up = 1;
@@ -454,9 +453,9 @@ namespace multimedia
             return list;
         }
 
-        public static string decodeData(double input,string end) //given double & the last symple in the text ,output data  for each double
+        public static string decodeData(double input/*,string end*/) //given double & the last symple in the text ,output data  for each double
         {
-            if (input == null || end == null)
+            if (input == null /*|| end == null*/)
                 return null;
 
             string res = "";
@@ -474,13 +473,13 @@ namespace multimedia
                     if (input < artlist[j].upper && input > artlist[j].lower)
                     {
                         res += artlist[j].data;
-                        if (artlist[j].data == end) //end of coding  need to change 
-                        {
-                            return res;
-                        }
                         double up = artlist[j].upper;
                         double down = artlist[j].lower;
                         double ratio = up - down;
+                        if (ratio < 0.000000001)  //end of coding  need to change 
+                        {
+                            return res;
+                        }
                         for (int k = 0; k < arthmitclist.Count; k++)
                         {
                             artlist[k].lower = arthmitclist[k].lower * ratio + down;
@@ -533,13 +532,21 @@ namespace multimedia
             {
                 Dict.Add(LetterDict[i]);
             }
-            string curr="";
-            int last = 0;
-            bool test = false;
-            for (int i = 0; i < input.Length; i++)
+            string curr=input[0]+"";
+            int last = 0, x = 1;
+            for (int j = 0; j < Dict.Count; j++)
             {
-                if(!test)
-                    curr += input[i];
+                if (input[0].ToString() == Dict[j])
+                {
+                    last = j;
+                    break;
+                }
+            }
+            bool test = false;
+            while (curr.Length > 0)
+            {
+                if (!test && x<input.Length)
+                    curr += input[x++];
                 test = true;
                 for (int j = 0; j < Dict.Count; j++)
                 {
@@ -550,7 +557,7 @@ namespace multimedia
                         break;
                     }
                 }
-                if (test) 
+                if (test || x>=input.Length)
                 {
                     mylist.Add(last);
                     if (Dict.Count < 100000)
@@ -561,8 +568,8 @@ namespace multimedia
                         temp += curr[o++];
                     curr = temp;
                 }
-                
             }
+            
             return mylist;
         }
 
@@ -571,10 +578,10 @@ namespace multimedia
             string res="";
             for (int i = 0; i < input.Count; i++)
             {
-
+                int x = input[i];
                 for (int j = 15; j >-1;j--)
                 {
-                    if ((input[i]&(1<<j))!=0)
+                    if ((x&(1<<j))!=0)
                         res+='1';
                     else
                         res+='0';
@@ -616,12 +623,17 @@ namespace multimedia
             {
                 if (test == 16)
                 {
-                    test = 0;
                     res.Add(curr);
                     curr = 0;
+                    test = 0;
                 }
-                curr=(curr|(input[i]-'0'))<<1;
+                if (input[i] == '1')
+                {
+                    curr += 1 << (15 - test);
+                }
+                test++;
             }
+            res.Add(curr);
             return res;
         }
 
