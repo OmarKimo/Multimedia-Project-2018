@@ -61,7 +61,8 @@ namespace multimedia
                 int value = input.ToList()[i].Value; //array[i]
                 string key = input.ToList()[i].Key; //input[i]
                 dict.Add(value);
-                list.Add(new Node(key, value));
+                if (value !=0)
+                    list.Add(new Node(key, value));
             }
 
             //build the tree
