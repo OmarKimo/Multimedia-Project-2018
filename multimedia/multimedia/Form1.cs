@@ -60,7 +60,6 @@ namespace multimedia
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            
 
         }
 
@@ -114,6 +113,14 @@ namespace multimedia
                 lzw.Main(allCharsDict.Keys.ToList());
                 IList<int> binarized = lzw.Coding(textToBeCompressed);
                 IList<char> binarizedChars = lzw.convertbinary(binarized);
+                /*
+                string x = lzw.deCoding(lzw.convertint(binarizedChars));
+                if (x.Length != textToBeCompressed.Length)
+                {
+                    int y = 0;
+                    y++;
+                }*/
+                
                 
                 //arthmitc.Main(allCharsDict.Keys.ToList(), allCharsDict.Values.ToList());
                 //string binarizedChars = arthmitc.buildbinary(textToBeCompressed, allCharsDict.Values.ToList());

@@ -294,14 +294,16 @@ namespace multimedia
                 }
             }
             Huffman.build(currlist);
-            /*
+            
             if (Huffman.callength() > input.Count)
             {
                 res.Add('0');
                 for (int i = 0; i < input.Count; i++)
                     res.Add(input[i]);
+                return res;
+
             }
-            res.Add('1');*/
+            res.Add('1');
             for (int i = 0; i < dict.Count; i++)
             {
                 int y = dict[i];
@@ -334,6 +336,16 @@ namespace multimedia
                     curr = "";
                 }
             }
+            return res;
+        }
+
+        public static IList<char> returncode(IList<char> input)
+        {
+            IList<char> res = new List<char>();
+
+
+
+
             return res;
         }
     }
@@ -576,13 +588,13 @@ namespace multimedia
             for (int i = 0; i < LetterDict.Count; i++)
                 Dict.Add(LetterDict[i].ToString());
             string curr = input[0] + "";
-            int last = 0, x = 0;
+            int last = 0, x = 1,mysize=input.Length;
             while (curr.Length > 0)
             {
                 while (true)
                 {
                     bool test = true;
-                    for (int j = 0; j < Dict.Count; j++)
+                    for (int j = 0; j < Dict.Count-1; j++)
                     {
                         if (curr == Dict[j])
                         {
@@ -594,12 +606,12 @@ namespace multimedia
                     if (test)
                         break;
                     if (x < input.Length)
-                        curr += input[++x];
+                        curr += input[x++];
                     else
                         break;
                 }
                 mylist.Add(last);
-                if (Dict.Count < 130000) //max 16 bit
+                if (Dict.Count < 1048576) //max 16 bit
                     Dict.Add(curr);
                 string temp = "";
                 int o = Dict[last].Length;
@@ -618,21 +630,17 @@ namespace multimedia
             IList<string> Dict = new List<string>();
             for (int i = 0; i < LetterDict.Count; i++)
                 Dict.Add(LetterDict[i].ToString());
-            string last = Dict[input[0]],curr="";
-            res += last;
+            string last = Dict[input[0]];
+            
             for (int i = 1; i < input.Count; i++)
             {
-                if(input[i]==Dict.Count)
-                    curr=last+last[0];
-                else 
-                    curr=Dict[input[i]];
-
-                if (Dict.Count < 130000)
-                    Dict.Add(last + curr[0]);
-
-                res += curr;
-                last=curr;
+                res += last;
+                if (Dict.Count < 1048576)
+                    Dict.Add(last + Dict[input[i]][0]);
+                last = Dict[input[i]];
             }
+            res += last;
+            int mysize = res.Length;
             return res;
         }
 
@@ -644,14 +652,12 @@ namespace multimedia
             IList<char> res = new List<char>();
             for (int i = 0; i < input.Count; i++)
             {
-                int x = input[i];
-                for (int j = 15; j > -1; j--)
-                {
-                    if ((x & (1 << j)) != 0)
-                        res.Add('1');
-                    else
-                        res.Add('0');
-                }
+                int y = input[i];
+                string binary = Convert.ToString(y, 2).PadLeft(20, '0');
+                if (binary.Length > 16)
+                    y = 0;
+                for (int j = 0; j < 16; j++)
+                    res.Add(binary[j]);
             }
 
             return res;
@@ -660,22 +666,18 @@ namespace multimedia
         public static IList<int> convertint(IList<char> input) //convert code binary to int
         {
             IList<int> res = new List<int>();
-            int curr = 0, test = 0;
-            for (int i = 0; i < input.Count; i++)
+            int curr = 0;
+            string mynum = "";
+            for (; curr < input.Count;curr++)
             {
-                if (test == 16)
+                mynum += input[curr];
+                if (mynum.Length == 20)
                 {
-                    res.Add(curr);
-                    curr = 0;
-                    test = 0;
+                    res.Add(Convert.ToInt32(mynum, 2));
+                    mynum = "";
                 }
-                if (input[i] == '1')
-                {
-                    curr += 1 << (15 - test);
-                }
-                test++;
+                    
             }
-            res.Add(curr);
             return res;
         }
 
