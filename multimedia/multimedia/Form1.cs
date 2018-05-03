@@ -228,7 +228,7 @@ namespace multimedia
 
 
                 lzw.Main(allCharsDict.Keys.ToList());
-                IList<int> mynum = new List<int>();
+                
                 string DecodedText = lzw.deCoding(lzw.convertint(Text));
 
                 //string DecodedText = Huffman.DecodeData(string.Join("", Text.ToArray()), generalChars);

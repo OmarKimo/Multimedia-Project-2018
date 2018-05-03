@@ -14,7 +14,7 @@ namespace multimedia
         public string code;
         public Node leftChild, rightChild;
 
-        public Node(string data,int number)
+        public Node(string data, int number)
         {
             this.data = data;
             this.number = number;
@@ -36,7 +36,6 @@ namespace multimedia
     class Huffman
     {
         static public int numberofextend; //no of extend huffman
-        static public int codelength;
         static private IList<Node> huffmanlist; //include all letter with thier code
         static private IList<int> dict;
         static public IList<Node> Gethuffman() //tested
@@ -47,7 +46,7 @@ namespace multimedia
             {
                 Node tempNode = huffmanlist[i];
                 newlist.Add(tempNode);
-            } 
+            }
             return newlist;
         }
         static public void build(Dictionary<string, int> input/*IList<string> input, IList<int> array*/) //tested
@@ -61,7 +60,7 @@ namespace multimedia
                 int value = input.ToList()[i].Value; //array[i]
                 string key = input.ToList()[i].Key; //input[i]
                 dict.Add(value);
-                if (value !=0)
+                if (value != 0)
                     list.Add(new Node(key, value));
             }
 
@@ -103,7 +102,7 @@ namespace multimedia
             //sort the nodes
             for (int i = 0; i < list.Count; i++)
             {
-                for (int j = i+1; j < list.Count; j++)
+                for (int j = i + 1; j < list.Count; j++)
                 {
                     if (list[i].number < list[j].number)
                     {
@@ -135,13 +134,13 @@ namespace multimedia
                 GenerateCode(parentNode.leftChild);
                 GenerateCode(parentNode.rightChild);
             }
-            
+
         }
 
         public static long callength() //must be less than the original size
         { //this number will increase if the gab between the no of rebeat letter decrease
-            long res=(18*dict.Count());//size of dict
-            for(int i=0;i<huffmanlist.Count;i++)
+            long res = (18 * dict.Count());//size of dict
+            for (int i = 0; i < huffmanlist.Count; i++)
             {
                 res += (huffmanlist[i].number * huffmanlist[i].code.Length);
             }
@@ -156,23 +155,23 @@ namespace multimedia
                 int x = dict[i];
                 for (int j = 17; j > -1; j--)
                 {
-                    if (((1<< j)& x)!=0)
+                    if (((1 << j) & x) != 0)
                     {
                         res += '1';
-                        x ^= (1<<j);
+                        x ^= (1 << j);
                     }
                     else
                         res += '0';
                 }
             }
-            
+
             for (int i = 0; i < input.Length; i++)
             {
                 for (int j = 0; j < huffmanlist.Count; j++)
                 {
                     if (input[i] == huffmanlist[j].data[0])
                     {
-                        res+=huffmanlist[j].code;
+                        res += huffmanlist[j].code;
                         break;
                     }
                 }
@@ -182,7 +181,7 @@ namespace multimedia
 
         public static string DecodeData(string input, IList<string> GeneralDict) //given code ,output data
         {
-            int x=0,length=0;
+            int x = 0, length = 0;
             //IList<int> mynum = new List<int>();
             Dictionary<string, int> GeneralDictwithMynum = new Dictionary<string, int>();
             for (int i = 0; i < GeneralDict.Count; i++)
@@ -191,7 +190,7 @@ namespace multimedia
                 int y = 0;
                 for (int j = 0; j < 18; j++)
                 {
-                    y |=( ( (input[x++] - '0') << (17 - j)));
+                    y |= (((input[x++] - '0') << (17 - j)));
                 }
                 GeneralDictwithMynum[GeneralDict[i]] = y;
                 length += y;
@@ -199,8 +198,8 @@ namespace multimedia
             }
             //Huffman.build(GeneralDict, mynum);
             Huffman.build(GeneralDictwithMynum);
-            string res = "",curr = "";
-            while(res.Length<length )
+            string res = "", curr = "";
+            while (res.Length < length)
             {
                 if (x > input.Length)
                     return res;
@@ -271,14 +270,81 @@ namespace multimedia
             }
 
         }
+
+
+
+
+        public static IList<char> applyhuffman(IList<char> input)
+        {
+            string[] x = { "0000", "0001", "0010", "0011", "0100", "0101", "0110", "0111", "1000", "1001", "1010", "1011", "1100", "1101", "1110", "1111" };
+            Dictionary<string, int> currlist = new Dictionary<string, int>();
+            for (int i = 0; i < 16; i++)
+            {
+                currlist.Add(x[i], 0);
+            }
+            IList<char> res = new List<char>();
+            string curr = "";
+            for (int i = 0; i < input.Count; i++)
+            {
+                curr += input[i];
+                if (curr.Length == 4)
+                {
+                    currlist[curr]++;
+                    curr = "";
+                }
+            }
+            Huffman.build(currlist);
+            /*
+            if (Huffman.callength() > input.Count)
+            {
+                res.Add('0');
+                for (int i = 0; i < input.Count; i++)
+                    res.Add(input[i]);
+            }
+            res.Add('1');*/
+            for (int i = 0; i < dict.Count; i++)
+            {
+                int y = dict[i];
+                for (int j = 17; j > -1; j--)
+                {
+                    if (((1 << j) & y) != 0)
+                    {
+                        res.Add('1');
+                        y ^= (1 << j);
+                    }
+                    else
+                        res.Add('0');
+                }
+            }
+            for (int i = 0; i < input.Count; i++)
+            {
+                curr += input[i];
+                if (curr.Length == 4)
+                {
+                    for (int j = 0; j < huffmanlist.Count; j++)
+                    {
+                        if (huffmanlist[j].data == curr)
+                        {
+                            for (int k = 0; k < huffmanlist[j].code.Length; j++)
+                            {
+                                res.Add(huffmanlist[j].code[k]);
+                            }
+                        }
+                    }
+                    curr = "";
+                }
+            }
+            return res;
+        }
     }
+
 
     class letter
     {
         public double upper;
         public double lower;
         public string data;
-        public letter(string data,double up,double low)
+        public letter(string data, double up, double low)
         {
             this.data = data;
             this.upper = up;
@@ -304,15 +370,15 @@ namespace multimedia
             double curr = 0.0;
             for (int i = 0; i < array.Count; i++)
             {
-                arthmitclist.Add(new letter(input[i] ,(curr + array[i]) / sum, curr / sum));
+                arthmitclist.Add(new letter(input[i], (curr + array[i]) / sum, curr / sum));
                 curr += array[i];
 
             }
         }
 
-        public static string buildbinary(string input,IList<int> number)
+        public static string buildbinary(string input, IList<int> number)
         {
-            string res="";
+            string res = "";
             IList<Double> x = new List<Double>();
             for (int i = 0; i < arthmitclist.Count; i++)
             {
@@ -355,7 +421,7 @@ namespace multimedia
             return res;
         }
 
-        public static string buildstring(string input,IList<string> gene)
+        public static string buildstring(string input, IList<string> gene)
         {
             string res = "";
             int x = 0;
@@ -376,13 +442,13 @@ namespace multimedia
             }
             arthmitc.Main(gene, mynum);
             //string send = arthmitclist[end].data;
-            
+
             while (x < input.Length)
             {
                 string curr = "";
                 for (int i = 0; i < 64; i++)
                     curr += input[x++];
-                res +=arthmitc.decodeData( arthmitc.Binarytodouble(curr));
+                res += arthmitc.decodeData(arthmitc.Binarytodouble(curr));
             }
             return res;
         }
@@ -392,10 +458,10 @@ namespace multimedia
             IList<double> list = new List<double>();
             IList<letter> artlist = new List<letter>();
             for (int i = 0; i < arthmitclist.Count; i++)
-            { 
-                artlist.Add(new letter(arthmitclist[i].data,arthmitclist[i].upper,arthmitclist[i].lower));
+            {
+                artlist.Add(new letter(arthmitclist[i].data, arthmitclist[i].upper, arthmitclist[i].lower));
             }
-            double up=1, down=0;
+            double up = 1, down = 0;
             char end = input[input.Length - 1]; //need to change
             string curr = "";
             for (int i = 0; i < input.Length; i++)
@@ -409,7 +475,7 @@ namespace multimedia
                         up = artlist[j].upper;
                         down = artlist[j].lower;
                         double ratio = up - down;
-                        if (ratio<0.000000001) //end of coding  need to change
+                        if (ratio < 0.000000001) //end of coding  need to change
                         {
                             list.Add((up + down) / 2.0);
                             up = 1;
@@ -444,8 +510,8 @@ namespace multimedia
             {
                 artlist.Add(new letter(arthmitclist[i].data, arthmitclist[i].upper, arthmitclist[i].lower));
             }
-  
-            while(true)
+
+            while (true)
             {
 
                 for (int j = 0; j < artlist.Count; j++)
@@ -470,17 +536,17 @@ namespace multimedia
             }
         }
 
-        public static string  doubletobinary(double x)
+        public static string doubletobinary(double x)
         {
-            long m = BitConverter.DoubleToInt64Bits(x); 
-            string str = Convert.ToString(m, 2); 
+            long m = BitConverter.DoubleToInt64Bits(x);
+            string str = Convert.ToString(m, 2);
             return str;
         }
 
         public static double Binarytodouble(string str)
         {
-            long n = Convert.ToInt64(str, 2); 
-            double x = BitConverter.Int64BitsToDouble(n); 
+            long n = Convert.ToInt64(str, 2);
+            double x = BitConverter.Int64BitsToDouble(n);
             return x;
         }
 
@@ -499,67 +565,84 @@ namespace multimedia
             {
                 LetterDict.Add(input[i]);
             }
-            
+
         }
 
         public static IList<int> Coding(string input) //given string , output code
         {
-            IList<int> mylist=new List<int>();
-            IList<string> Dict=new List<string>();
+            IList<int> mylist = new List<int>();
+            IList<string> Dict = new List<string>();
             for (int i = 0; i < LetterDict.Count; i++)
-            {
                 Dict.Add(LetterDict[i].ToString());
-            }
-            string curr=input[0]+"";
+            string curr = input[0] + "";
             int last = 0, x = 1;
-            for (int j = 0; j < Dict.Count; j++)
-            {
-                if (input[0].ToString() == Dict[j])
-                {
-                    last = j;
-                    break;
-                }
-            }
-            bool test = false;
             while (curr.Length > 0)
             {
-                if (!test && x<input.Length)
-                    curr += input[x++];
-                test = true;
-                for (int j = 0; j < Dict.Count; j++)
+                while (true)
                 {
-                    if (curr == Dict[j])
+                    bool test = true;
+                    for (int j = 0; j < Dict.Count; j++)
                     {
-                        last = j;
-                        test = false;
-                        break;
+                        if (curr == Dict[j])
+                        {
+                            last = j;
+                            test = false;
+                            break;
+                        }
                     }
+                    if (test)
+                        break;
+                    if (x < input.Length)
+                        curr += input[x++];
+                    else
+                        break;
                 }
-                if (test || x>=input.Length)
-                {
-                    mylist.Add(last);
-                    if (Dict.Count < 131070) //max 16 bit
-                        Dict.Add(curr);
-                    string temp = "";
-                    int o = Dict[last].Length;
-                    while (o < curr.Length)
-                        temp += curr[o++];
-                    curr = temp;
-                }
+                mylist.Add(last);
+                if (Dict.Count < 130000) //max 16 bit
+                    Dict.Add(curr);
+                string temp = "";
+                int o = Dict[last].Length;
+                while (o < curr.Length)
+                    temp += curr[o++];
+                curr = temp;
             }
-            
             return mylist;
         }
 
+
+        public static string deCoding(IList<int> input) //given code , output string
+        {
+            string res = "";
+            IList<string> Dict = new List<string>();
+            for (int i = 0; i < LetterDict.Count; i++)
+                Dict.Add(LetterDict[i].ToString());
+            string last = Dict[input[0]];
+            res += last;
+
+            for (int i = 1; i < input.Count; i++)
+            {
+                if (input[i] >= Dict.Count)
+                    input[i]++;
+                res += Dict[input[i]];
+                if (Dict.Count < 130000)
+                {
+                    Dict.Add(last + Dict[input[i]][0]);
+                    last = Dict[input[i]];
+                }
+            }
+            return res;
+        }
+
+
         public static IList<char> convertbinary(IList<int> input) //convert int list to binary code
-        { 
-            IList<char> res=new List<char>();
+        {
+            IList<char> res = new List<char>();
             for (int i = 0; i < input.Count; i++)
             {
                 int x = input[i];
-                for (int j = 15; j >-1;j--)
+                for (int j = 15; j > -1; j--)
                 {
-                    if ((x&(1<<j))!=0)
+                    if ((x & (1 << j)) != 0)
                         res.Add('1');
                     else
                         res.Add('0');
@@ -569,34 +652,10 @@ namespace multimedia
             return res;
         }
 
-        public static string deCoding(IList<int> input) //given code , output string
-        {
-            string res = "";
-            IList<string> Dict = new List<string>();
-            for (int i = 0; i < LetterDict.Count; i++)
-            {
-                string x = "" + LetterDict[i];
-                Dict.Add(x);
-            }
-            string last = Dict[input[0]];
-            res+=last;
-            for (int i = 1; i < input.Count; i++)
-            {
-                res += Dict[input[i]];
-                if (Dict.Count < 131070)
-                {
-                    Dict.Add(last + Dict[input[i]][0]);
-                    last = Dict[input[i]];
-                }
-                    
-            }
-            return res;
-        }
-
         public static IList<int> convertint(IList<char> input) //convert code binary to int
         {
             IList<int> res = new List<int>();
-            int curr = 0,test=0;
+            int curr = 0, test = 0;
             for (int i = 0; i < input.Count; i++)
             {
                 if (test == 16)
