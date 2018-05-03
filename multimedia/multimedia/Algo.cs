@@ -570,12 +570,13 @@ namespace multimedia
 
         public static IList<int> Coding(string input) //given string , output code
         {
+            
             IList<int> mylist = new List<int>();
             IList<string> Dict = new List<string>();
             for (int i = 0; i < LetterDict.Count; i++)
                 Dict.Add(LetterDict[i].ToString());
             string curr = input[0] + "";
-            int last = 0, x = 1;
+            int last = 0, x = 0;
             while (curr.Length > 0)
             {
                 while (true)
@@ -593,7 +594,7 @@ namespace multimedia
                     if (test)
                         break;
                     if (x < input.Length)
-                        curr += input[x++];
+                        curr += input[++x];
                     else
                         break;
                 }
@@ -607,6 +608,7 @@ namespace multimedia
                 curr = temp;
             }
             return mylist;
+
         }
 
 
@@ -616,22 +618,25 @@ namespace multimedia
             IList<string> Dict = new List<string>();
             for (int i = 0; i < LetterDict.Count; i++)
                 Dict.Add(LetterDict[i].ToString());
-            string last = Dict[input[0]];
+            string last = Dict[input[0]],curr="";
             res += last;
-
             for (int i = 1; i < input.Count; i++)
             {
-                if (input[i] >= Dict.Count)
-                    input[i]++;
-                res += Dict[input[i]];
+                if(input[i]==Dict.Count)
+                    curr=last+last[0];
+                else 
+                    curr=Dict[input[i]];
+
                 if (Dict.Count < 130000)
-                {
-                    Dict.Add(last + Dict[input[i]][0]);
-                    last = Dict[input[i]];
-                }
+                    Dict.Add(last + curr[0]);
+
+                res += curr;
+                last=curr;
             }
             return res;
         }
+
+
 
 
         public static IList<char> convertbinary(IList<int> input) //convert int list to binary code
