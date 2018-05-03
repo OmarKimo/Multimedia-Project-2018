@@ -19,7 +19,7 @@ namespace multimedia
         private string EncodedText;
         private string tmpText;
         private IList<string> paths;
-        private Dictionary<string, int> allCharsDict;
+        private Dictionary<char, int> allCharsDict;
         public Form1()
         {
             InitializeComponent();
@@ -35,7 +35,7 @@ namespace multimedia
                 paths.Add("D:\\Computer department\\cairo university\\Assembly game\\Multimedia-Project-2018\\DataSet\\DataSet_" + (i + 1).ToString() + ".tsv");
 
             }
-            allCharsDict = new Dictionary<string, int>();
+            allCharsDict = new Dictionary<char, int>();
             init(allCharsDict);
             EncodedText = "";
         }
@@ -60,30 +60,11 @@ namespace multimedia
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            //string[] x ={"a","b","c","d","e","f"};
-            //int[] arr={12,3,400,200,1,30};
-            ////test huffman 
-            //Huffman.build(x, arr);
-            //IList<Node> list = Huffman.Gethuffman(); //for debug
-            //string y = Huffman.codeData("abcd"); //000100001101
-            //y = "001110000000000000010000101010101010010101010100101010101010101010101010101010111110101011101001010101";
-            //y = Huffman.DecodeData(y,generalChars); //check if return same value abcd
-            ////string z = Huffman.DecodeData("010000101",);//bdb
-            //Huffman.extendhuffman();
-            //list = Huffman.Gethuffman();
-            //bool test = list[0] == null;
-            //test arthmitic
-            //arthmitc.Main(x, arr);
-            //letter y=arthmitc.arthmitclist[0];
-            //IList<Double> c=arthmitc.codeData("abc");
-            //string f = arthmitc.decodeData(c[0], "c");
-            //f=arthmitc.doubletobinary(arthmitc.Binarytodouble("01010001"));
-            //double r=arthmitc.Binarytodouble("10010");
-            //f = arthmitc.doubletobinary(0.5);
+            
 
         }
 
-        private void init(Dictionary<string, int> chars)
+        private void init(Dictionary<char, int> chars)
         {
 
             string txt = "";
@@ -101,7 +82,7 @@ namespace multimedia
             of.Write(txt);
             foreach (char ch in txt)
             {
-                allCharsDict.Add(ch.ToString(), 0);
+                allCharsDict.Add(ch, 0);
             }
             of.Close();
             file.Close();
@@ -111,7 +92,7 @@ namespace multimedia
         {
             try
             {
-                if (fileNameWithPath == "")
+                if (fileNameWithPath == "" || fileNameWithPath.Split('.').Last() == "bin")
                 {
                     MessageBox.Show("Choose a file to compress!");
                     return;
@@ -126,13 +107,13 @@ namespace multimedia
 
                 Process(textToBeCompressed);
 
-                Huffman.build(allCharsDict);
+                //Huffman.build(allCharsDict);
                 //Huffman.extendhuffman();
-                string binarizedChars = Huffman.codeData(textToBeCompressed);
+                //string binarizedChars = Huffman.codeData(textToBeCompressed);
 
-                //lzw.Main(allCharsDict.Keys.ToList());
-                //IList<int> binarized = lzw.Coding(textToBeCompressed);
-                //string binarizedChars = lzw.convertbinary(binarized);
+                lzw.Main(allCharsDict.Keys.ToList());
+                IList<int> binarized = lzw.Coding(textToBeCompressed);
+                IList<char> binarizedChars = lzw.convertbinary(binarized);
                 
                 //arthmitc.Main(allCharsDict.Keys.ToList(), allCharsDict.Values.ToList());
                 //string binarizedChars = arthmitc.buildbinary(textToBeCompressed, allCharsDict.Values.ToList());
@@ -142,7 +123,7 @@ namespace multimedia
                 BinaryWriter binaryFile = new BinaryWriter(file, Encoding.UTF8);
 
                 string s = "";
-                for (int i = 1; i <= binarizedChars.Length; i++)
+                for (int i = 1; i <= binarizedChars.Count; i++)
                 {
                     s += binarizedChars[i - 1];
                     if (i % 8 == 0)
@@ -157,7 +138,7 @@ namespace multimedia
                     s = "";
                 }
 
-                //byte[] bytesFile = GetBytes(binarizedChars);
+               
 
                 file.Close();
                 binaryFile.Close();
@@ -174,50 +155,19 @@ namespace multimedia
             EncodedText = Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(text));
             string uniqueChars = String.Join("", EncodedText.Distinct());
             tmpText += uniqueChars;
-            //StreamWriter of = new StreamWriter("testFile.txt"); //Just for test
-
-            //Dictionary<string, int> dict = new Dictionary<string,int>();
+          
             foreach (char ch in uniqueChars)
             {
                 int count = text.Count(f => f == ch);
-                allCharsDict[ch.ToString()] = count;
-                //generalChars.Add(ch.ToString());
-                /*if (dict.ContainsKey(ch))
-                {
-                    dict[ch] += count;
-                }
-                else
-                {
-                    dict[ch] = count;
-                }
-                mxCnt += (dict[ch] > mxCnt) ? dict[ch] - mxCnt : 0;*/
-                //of.Write(ch.ToString() + "\n");
+                allCharsDict[ch] = count;
+                
             }
-            //of.Close();
+            
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            /*for (int i = 0; i < 20; i++)
-            {
-                FileStream fr = new FileStream(paths[i], FileMode.Open, FileAccess.Read);
-                StreamReader sr = new StreamReader(fr);
-                string textToBeCompressed = sr.ReadToEnd();
-                fr.Close();
-                sr.Close();
-
-                Process(textToBeCompressed);
-            }
-            MessageBox.Show(mxCnt.ToString());
-            tmpText = String.Join("", tmpText.Distinct());
-            StreamWriter of = new StreamWriter("lzw Dictionary.txt"); //Just for test
-
-            //Dictionary<char, int> dict = new Dictionary<char,int>();
-            foreach (char ch in tmpText)
-            {
-                of.Write(ch.ToString() + "\n");
-            }
-            of.Close();*/
+           
         }
 
         private byte[] GetBytes(string bitString)
@@ -277,11 +227,11 @@ namespace multimedia
 
 
 
-                //lzw.Main(allCharsDict.Keys.ToList());
-                //IList<int> mynum = new List<int>();
-                //string DecodedText = lzw.deCoding(lzw.convertint(string.Join("", Text.ToArray())));
+                lzw.Main(allCharsDict.Keys.ToList());
+                IList<int> mynum = new List<int>();
+                string DecodedText = lzw.deCoding(lzw.convertint(Text));
 
-                string DecodedText = Huffman.DecodeData(string.Join("", Text.ToArray()), generalChars);
+                //string DecodedText = Huffman.DecodeData(string.Join("", Text.ToArray()), generalChars);
 
                 //arthmitc.Main(allCharsDict.Keys.ToList(), allCharsDict.Values.ToList());
                 //string DecodedText = arthmitc.buildstring(string.Join("",Text.ToArray()), allCharsDict.Keys.ToList());

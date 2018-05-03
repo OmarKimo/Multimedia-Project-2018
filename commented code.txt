@@ -1,0 +1,58 @@
+
+  //StreamWriter of = new StreamWriter("testFile.txt"); //Just for test
+
+            //Dictionary<string, int> dict = new Dictionary<string,int>();
+//generalChars.Add(ch.ToString());
+                /*if (dict.ContainsKey(ch))
+                {
+                    dict[ch] += count;
+                }
+                else
+                {
+                    dict[ch] = count;
+                }
+                mxCnt += (dict[ch] > mxCnt) ? dict[ch] - mxCnt : 0;*/
+                //of.Write(ch.ToString() + "\n");
+//of.Close();
+ //byte[] bytesFile = GetBytes(binarizedChars);
+//string[] x ={"a","b","c","d","e","f"};
+            //int[] arr={12,3,400,200,1,30};
+            ////test huffman 
+            //Huffman.build(x, arr);
+            //IList<Node> list = Huffman.Gethuffman(); //for debug
+            //string y = Huffman.codeData("abcd"); //000100001101
+            //y = "001110000000000000010000101010101010010101010100101010101010101010101010101010111110101011101001010101";
+            //y = Huffman.DecodeData(y,generalChars); //check if return same value abcd
+            ////string z = Huffman.DecodeData("010000101",);//bdb
+            //Huffman.extendhuffman();
+            //list = Huffman.Gethuffman();
+            //bool test = list[0] == null;
+            //test arthmitic
+            //arthmitc.Main(x, arr);
+            //letter y=arthmitc.arthmitclist[0];
+            //IList<Double> c=arthmitc.codeData("abc");
+            //string f = arthmitc.decodeData(c[0], "c");
+            //f=arthmitc.doubletobinary(arthmitc.Binarytodouble("01010001"));
+            //double r=arthmitc.Binarytodouble("10010");
+            //f = arthmitc.doubletobinary(0.5);
+
+ /*for (int i = 0; i < 20; i++)
+            {
+                FileStream fr = new FileStream(paths[i], FileMode.Open, FileAccess.Read);
+                StreamReader sr = new StreamReader(fr);
+                string textToBeCompressed = sr.ReadToEnd();
+                fr.Close();
+                sr.Close();
+
+                Process(textToBeCompressed);
+            }
+            MessageBox.Show(mxCnt.ToString());
+            tmpText = String.Join("", tmpText.Distinct());
+            StreamWriter of = new StreamWriter("lzw Dictionary.txt"); //Just for test
+
+            //Dictionary<char, int> dict = new Dictionary<char,int>();
+            foreach (char ch in tmpText)
+            {
+                of.Write(ch.ToString() + "\n");
+            }
+            of.Close();*/
