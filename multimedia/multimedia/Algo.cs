@@ -201,7 +201,7 @@ namespace multimedia
             string res = "", curr = "";
             while (res.Length < length)
             {
-                if (x > input.Length)
+                if (x >= input.Length)
                     return res;
                 //add current code
                 curr += input[x++];
@@ -278,7 +278,7 @@ namespace multimedia
         {
             string[] x = { "0000", "0001", "0010", "0011", "0100", "0101", "0110", "0111", "1000", "1001", "1010", "1011", "1100", "1101", "1110", "1111" };
             Dictionary<string, int> currlist = new Dictionary<string, int>();
-            for (int i = 0; i < 16; i++)
+            for (int i = 0; i < 16; i++) //here
             {
                 currlist.Add(x[i], 0);
             }
@@ -287,14 +287,15 @@ namespace multimedia
             for (int i = 0; i < input.Count; i++)
             {
                 curr += input[i];
-                if (curr.Length == 4)
+                if (curr.Length == 4) //here
                 {
                     currlist[curr]++;
                     curr = "";
                 }
             }
+
             Huffman.build(currlist);
-            
+            /*
             if (Huffman.callength() > input.Count)
             {
                 res.Add('0');
@@ -303,34 +304,28 @@ namespace multimedia
                 return res;
 
             }
-            res.Add('1');
+            res.Add('1');*/
             for (int i = 0; i < dict.Count; i++)
             {
-                int y = dict[i];
-                for (int j = 17; j > -1; j--)
-                {
-                    if (((1 << j) & y) != 0)
-                    {
-                        res.Add('1');
-                        y ^= (1 << j);
-                    }
-                    else
-                        res.Add('0');
-                }
+                int y = currlist[x[i]];
+                string binary = Convert.ToString(y, 2).PadLeft(32, '0');//here
+                for (int j = 0; j < 32; j++) //here
+                    res.Add(binary[j]);
             }
             for (int i = 0; i < input.Count; i++)
             {
                 curr += input[i];
-                if (curr.Length == 4)
+                if (curr.Length == 4) //here
                 {
                     for (int j = 0; j < huffmanlist.Count; j++)
                     {
                         if (huffmanlist[j].data == curr)
                         {
-                            for (int k = 0; k < huffmanlist[j].code.Length; j++)
+                            for (int k = 0; k < huffmanlist[j].code.Length; k++)
                             {
                                 res.Add(huffmanlist[j].code[k]);
                             }
+                            break;
                         }
                     }
                     curr = "";
@@ -342,13 +337,170 @@ namespace multimedia
         public static IList<char> returncode(IList<char> input)
         {
             IList<char> res = new List<char>();
-
-
-
-
+            string[] x = { "0000", "0001", "0010", "0011", "0100", "0101", "0110", "0111", "1000", "1001", "1010", "1011", "1100", "1101", "1110", "1111" };
+            Dictionary<string, int> currlist = new Dictionary<string, int>();
+            for (int i = 0; i < 16; i++) //here
+            {
+                currlist.Add(x[i], 0);
+            }
+            /*
+            if (input[0] == '0')
+            {
+                input.RemoveAt(0);
+                return input;
+            }*/
+            input.RemoveAt(0);
+            int curr = 0, y = 0, length = 0;
+            string mynum = "";
+            for (; y < 16; curr++) //here
+            {
+                mynum += input[curr];
+                if (mynum.Length == 32)//here
+                {
+                    length += Convert.ToInt32(mynum, 2);
+                    currlist[x[y++]] = Convert.ToInt32(mynum, 2);
+                    mynum = "";
+                }
+            }
+            Huffman.build(currlist);
+            string curr2 = "";
+            while (res.Count < length)
+            {
+                if (curr >= input.Count)
+                    return res;
+                //add current code
+                curr2 += input[curr++];
+                //search on current code on the list 
+                for (int j = 0; j < huffmanlist.Count; j++)
+                {
+                    if (curr2 == huffmanlist[j].code) //if found then add data to result and search on the next symple 
+                    {
+                        for (int k = 0; k < huffmanlist[j].data.Length; k++)
+                            res.Add(huffmanlist[j].data[k]);
+                        curr2 = "";
+                        break;
+                    }
+                }
+            }
             return res;
         }
     }
+
+
+    class lzw
+    {
+        public static IList<char> LetterDict;
+        public static int mymax = 65536; //65536 16 // 1048576 20
+        public static int maxbit = 16;
+
+        public static void Main(IList<char> input) //give them array of char to initil dict
+        {
+            //fill letterdict with all letter in the data set
+            LetterDict = new List<char>();
+            for (int i = 0; i < input.Count; i++)
+            {
+                LetterDict.Add(input[i]);
+            }
+
+        }
+
+        public static IList<int> Coding(string input) //given string , output code
+        {
+
+            IList<int> mylist = new List<int>();
+            Dictionary<string, int> dict = new Dictionary<string, int>();
+            int index = 0, last = 0, x = 1, slast = 0;
+            while (index < LetterDict.Count)
+                dict.Add(LetterDict[index].ToString(), index++);
+            string curr = input[0] + "";
+            while (curr.Length > 0)
+            {
+                while (true)
+                {
+                    if (dict.ContainsKey(curr))
+                    {
+                        last = dict[curr];
+                        slast = curr.Length;
+                    }
+                    else
+                        break;
+                    if (x < input.Length)
+                        curr += input[x++];
+                    else
+                        break;
+                }
+                mylist.Add(last);
+                if (index < mymax && !(dict.ContainsKey(curr))) //max for bit
+                    dict.Add(curr, index++);
+                curr = curr.Remove(0, slast);
+            }
+
+            return mylist;
+
+        }
+
+
+        public static string deCoding(IList<int> input) //given code , output string
+        {
+            string res = "";
+            IList<string> Dict = new List<string>();
+            for (int i = 0; i < LetterDict.Count; i++)
+                Dict.Add(LetterDict[i].ToString());
+            string last = Dict[input[0]];
+
+            for (int i = 1; i < input.Count; i++)
+            {
+                res += last;
+                if (input[i] == Dict.Count)
+                    Dict.Add(last + last[0]);
+                else
+                    Dict.Add(last + Dict[input[i]][0]);
+
+                last = Dict[input[i]];
+            }
+            res += last;
+            int mysize = res.Length;
+            return res;
+        }
+
+
+
+
+        public static IList<char> convertbinary(IList<int> input) //convert int list to binary code
+        {
+            IList<char> res = new List<char>();
+            for (int i = 0; i < input.Count; i++)
+            {
+                int y = input[i];
+                string binary = Convert.ToString(y, 2).PadLeft(maxbit, '0');
+                for (int j = 0; j < maxbit; j++)
+                    res.Add(binary[j]);
+            }
+
+            return res;
+        }
+
+        public static IList<int> convertint(IList<char> input) //convert code binary to int
+        {
+            IList<int> res = new List<int>();
+            int curr = 0;
+            string mynum = "";
+            for (; curr < input.Count; curr++)
+            {
+                mynum += input[curr];
+                if (mynum.Length == maxbit)
+                {
+                    res.Add(Convert.ToInt32(mynum, 2));
+                    mynum = "";
+                }
+
+            }
+            return res;
+        }
+
+    }
+
+
 
 
     class letter
@@ -563,127 +715,6 @@ namespace multimedia
         }
 
     }
-
-
-    class lzw
-    {
-        public static IList<char> LetterDict;
-
-        public static void Main(IList<char> input) //give them array of char to initil dict
-        {
-            //fill letterdict with all letter in the data set
-            LetterDict = new List<char>();
-            for (int i = 0; i < input.Count; i++)
-            {
-                LetterDict.Add(input[i]);
-            }
-
-        }
-
-        public static IList<int> Coding(string input) //given string , output code
-        {
-            
-            IList<int> mylist = new List<int>();
-            IList<string> Dict = new List<string>();
-            for (int i = 0; i < LetterDict.Count; i++)
-                Dict.Add(LetterDict[i].ToString());
-            string curr = input[0] + "";
-            int last = 0, x = 1,mysize=input.Length;
-            while (curr.Length > 0)
-            {
-                while (true)
-                {
-                    bool test = true;
-                    for (int j = 0; j < Dict.Count-1; j++)
-                    {
-                        if (curr == Dict[j])
-                        {
-                            last = j;
-                            test = false;
-                            break;
-                        }
-                    }
-                    if (test)
-                        break;
-                    if (x < input.Length)
-                        curr += input[x++];
-                    else
-                        break;
-                }
-                mylist.Add(last);
-                if (Dict.Count < 1048576) //max 16 bit
-                    Dict.Add(curr);
-                string temp = "";
-                int o = Dict[last].Length;
-                while (o < curr.Length)
-                    temp += curr[o++];
-                curr = temp;
-            }
-            return mylist;
-
-        }
-
-
-        public static string deCoding(IList<int> input) //given code , output string
-        {
-            string res = "";
-            IList<string> Dict = new List<string>();
-            for (int i = 0; i < LetterDict.Count; i++)
-                Dict.Add(LetterDict[i].ToString());
-            string last = Dict[input[0]];
-            
-            for (int i = 1; i < input.Count; i++)
-            {
-                res += last;
-                if (Dict.Count < 1048576)
-                    Dict.Add(last + Dict[input[i]][0]);
-                last = Dict[input[i]];
-            }
-            res += last;
-            int mysize = res.Length;
-            return res;
-        }
-
-
-
-
-        public static IList<char> convertbinary(IList<int> input) //convert int list to binary code
-        {
-            IList<char> res = new List<char>();
-            for (int i = 0; i < input.Count; i++)
-            {
-                int y = input[i];
-                string binary = Convert.ToString(y, 2).PadLeft(20, '0');
-                if (binary.Length > 16)
-                    y = 0;
-                for (int j = 0; j < 16; j++)
-                    res.Add(binary[j]);
-            }
-
-            return res;
-        }
-
-        public static IList<int> convertint(IList<char> input) //convert code binary to int
-        {
-            IList<int> res = new List<int>();
-            int curr = 0;
-            string mynum = "";
-            for (; curr < input.Count;curr++)
-            {
-                mynum += input[curr];
-                if (mynum.Length == 20)
-                {
-                    res.Add(Convert.ToInt32(mynum, 2));
-                    mynum = "";
-                }
-                    
-            }
-            return res;
-        }
-
-    }
-
-
 
 
 }

@@ -113,6 +113,7 @@ namespace multimedia
                 lzw.Main(allCharsDict.Keys.ToList());
                 IList<int> binarized = lzw.Coding(textToBeCompressed);
                 IList<char> binarizedChars = lzw.convertbinary(binarized);
+                //IList<char> binarizedChars = Huffman.applyhuffman(binarizedChars1);
                 /*
                 string x = lzw.deCoding(lzw.convertint(binarizedChars));
                 if (x.Length != textToBeCompressed.Length)
@@ -235,7 +236,7 @@ namespace multimedia
 
 
                 lzw.Main(allCharsDict.Keys.ToList());
-                
+                //(Huffman.returncode(Text)
                 string DecodedText = lzw.deCoding(lzw.convertint(Text));
 
                 //string DecodedText = Huffman.DecodeData(string.Join("", Text.ToArray()), generalChars);
@@ -255,6 +256,11 @@ namespace multimedia
             {
                 MessageBox.Show("Error!!" + ex);
             }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
