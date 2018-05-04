@@ -390,8 +390,8 @@ namespace multimedia
     class lzw
     {
         public static IList<char> LetterDict;
-        public static int mymax = 65536; //65536 16 // 1048576 20
-        public static int maxbit = 16;
+        public static int mymax = 1<<20; //65536 16 // 1048576 20
+        public static int maxbit = 20;
 
         public static void Main(IList<char> input) //give them array of char to initil dict
         {
@@ -469,31 +469,42 @@ namespace multimedia
         public static IList<char> convertbinary(IList<int> input) //convert int list to binary code
         {
             IList<char> res = new List<char>();
+            /*
+            string binary = Convert.ToString(maxbit-10, 2).PadLeft(4, '0');
+            for (int j = 0; j < maxbit; j++)
+                res.Add(binary[j]);
+            */
+            int maxcurr = Convert.ToString(LetterDict.Count, 2).Length;
+            int x = LetterDict.Count;
             for (int i = 0; i < input.Count; i++)
             {
-                int y = input[i];
-                string binary = Convert.ToString(y, 2).PadLeft(maxbit, '0');
-                for (int j = 0; j < maxbit; j++)
+                string binary = Convert.ToString(input[i], 2).PadLeft(maxcurr, '0');
+                for (int j = 0; j < binary.Length; j++)
                     res.Add(binary[j]);
+                maxcurr = Convert.ToString(++x, 2).Length < maxbit ? Convert.ToString(x, 2).Length : maxbit;
             }
-
+            while (res.Count % 8 != 0)
+                res.Add('0');
             return res;
         }
 
         public static IList<int> convertint(IList<char> input) //convert code binary to int
         {
             IList<int> res = new List<int>();
+            int maxcurr = Convert.ToString(LetterDict.Count, 2).Length;
+            int x = LetterDict.Count;
             int curr = 0;
             string mynum = "";
             for (; curr < input.Count; curr++)
             {
                 mynum += input[curr];
-                if (mynum.Length == maxbit)
+                if (mynum.Length == maxcurr)
                 {
                     res.Add(Convert.ToInt32(mynum, 2));
                     mynum = "";
+                    maxcurr = Convert.ToString(++x, 2).Length < maxbit ? Convert.ToString(x, 2).Length : maxbit;
                 }
-
+                
             }
             return res;
         }
