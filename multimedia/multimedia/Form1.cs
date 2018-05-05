@@ -30,9 +30,9 @@ namespace multimedia
             paths = new List<string>();
             for (int i = 0; i < 20; i++)
             {
-                paths.Add("D:\\Major & Interests\\Github Repositories & My Projects\\Multimedia-Project-2018\\DataSet\\DataSet_" + (i + 1).ToString() + ".tsv");
+                //paths.Add("D:\\Major & Interests\\Github Repositories & My Projects\\Multimedia-Project-2018\\DataSet\\DataSet_" + (i + 1).ToString() + ".tsv");
 
-                //paths.Add("D:\\Computer department\\cairo university\\Assembly game\\Multimedia-Project-2018\\DataSet\\DataSet_" + (i + 1).ToString() + ".tsv");
+                paths.Add("D:\\Computer department\\cairo university\\Assembly game\\Multimedia-Project-2018\\DataSet\\DataSet_" + (i + 1).ToString() + ".tsv");
 
             }
             allCharsDict = new Dictionary<char, int>();
@@ -60,7 +60,6 @@ namespace multimedia
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
         }
 
         private void init(Dictionary<char, int> chars)
@@ -113,6 +112,8 @@ namespace multimedia
                 lzw.Main(allCharsDict.Keys.ToList());
                 IList<int> binarized = lzw.Coding(textToBeCompressed);
                 IList<char> binarizedChars = lzw.convertbinary(binarized);
+                //binarizedChars = runlength.main(binarizedChars);
+                //binarizedChars= optmize.main(binarizedChars);
                 //IList<char> binarizedChars = Huffman.applyhuffman(binarizedChars1);
                 /*
                 string x = lzw.deCoding(lzw.convertint(binarizedChars));
@@ -237,6 +238,7 @@ namespace multimedia
 
                 lzw.Main(allCharsDict.Keys.ToList());
                 //(Huffman.returncode(Text)
+                //Text = optmize.back(Text);
                 string DecodedText = lzw.deCoding(lzw.convertint(Text));
 
                 //string DecodedText = Huffman.DecodeData(string.Join("", Text.ToArray()), generalChars);

@@ -38,10 +38,10 @@
             // 
             // Compress
             // 
-            this.Compress.Location = new System.Drawing.Point(59, 102);
-            this.Compress.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Compress.Location = new System.Drawing.Point(79, 126);
+            this.Compress.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Compress.Name = "Compress";
-            this.Compress.Size = new System.Drawing.Size(118, 78);
+            this.Compress.Size = new System.Drawing.Size(157, 96);
             this.Compress.TabIndex = 0;
             this.Compress.Text = "Compress";
             this.Compress.UseVisualStyleBackColor = true;
@@ -49,10 +49,10 @@
             // 
             // unCompress
             // 
-            this.unCompress.Location = new System.Drawing.Point(288, 102);
-            this.unCompress.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.unCompress.Location = new System.Drawing.Point(384, 126);
+            this.unCompress.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.unCompress.Name = "unCompress";
-            this.unCompress.Size = new System.Drawing.Size(118, 78);
+            this.unCompress.Size = new System.Drawing.Size(157, 96);
             this.unCompress.TabIndex = 1;
             this.unCompress.Text = "unCompress";
             this.unCompress.UseVisualStyleBackColor = true;
@@ -60,9 +60,10 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(143, 42);
+            this.button1.Location = new System.Drawing.Point(191, 52);
+            this.button1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(92, 34);
+            this.button1.Size = new System.Drawing.Size(123, 42);
             this.button1.TabIndex = 2;
             this.button1.Text = "Choose file";
             this.button1.UseVisualStyleBackColor = true;
@@ -70,18 +71,20 @@
             // 
             // NameOfFile
             // 
-            this.NameOfFile.Location = new System.Drawing.Point(259, 42);
+            this.NameOfFile.Location = new System.Drawing.Point(345, 52);
+            this.NameOfFile.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.NameOfFile.Multiline = true;
             this.NameOfFile.Name = "NameOfFile";
             this.NameOfFile.ReadOnly = true;
-            this.NameOfFile.Size = new System.Drawing.Size(168, 34);
+            this.NameOfFile.Size = new System.Drawing.Size(223, 41);
             this.NameOfFile.TabIndex = 3;
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(10, 11);
+            this.button2.Location = new System.Drawing.Point(13, 14);
+            this.button2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(63, 49);
+            this.button2.Size = new System.Drawing.Size(84, 60);
             this.button2.TabIndex = 4;
             this.button2.Text = "test";
             this.button2.UseVisualStyleBackColor = true;
@@ -90,10 +93,10 @@
             // 
             // check
             // 
-            this.check.Location = new System.Drawing.Point(207, 170);
-            this.check.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.check.Location = new System.Drawing.Point(247, 225);
+            this.check.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.check.Name = "check";
-            this.check.Size = new System.Drawing.Size(51, 44);
+            this.check.Size = new System.Drawing.Size(123, 41);
             this.check.TabIndex = 5;
             this.check.Text = "Check";
             this.check.UseVisualStyleBackColor = true;
@@ -101,16 +104,16 @@
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(482, 225);
+            this.ClientSize = new System.Drawing.Size(643, 277);
             this.Controls.Add(this.check);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.NameOfFile);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.unCompress);
             this.Controls.Add(this.Compress);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Form1";
             this.Text = "check";
             this.Load += new System.EventHandler(this.Form1_Load);

@@ -18,3 +18,4 @@ D:\Computer department\cairo university\Assembly game\Multimedia-Project-2018\mu
 D:\Computer department\cairo university\Assembly game\Multimedia-Project-2018\multimedia\multimedia\bin\Debug\multimedia.exe
 D:\Computer department\cairo university\Assembly game\Multimedia-Project-2018\multimedia\multimedia\bin\Debug\multimedia.pdb
 D:\Major & Interests\Github Repositories & My Projects\Multimedia-Project-2018\multimedia\multimedia\obj\Debug\multimedia.Form2.resources
+D:\Computer department\cairo university\Assembly game\Multimedia-Project-2018\multimedia\multimedia\obj\Debug\multimedia.Form2.resources
