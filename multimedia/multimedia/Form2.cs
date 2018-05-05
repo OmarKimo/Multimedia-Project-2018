@@ -55,7 +55,7 @@ namespace multimedia
                 od.RestoreDirectory = true;
                 fileNameWithPath2 = od.FileName;
                 fileNameWithoutPath2 = fileNameWithPath2.Split('\\').Last();
-                textBox2.Text = fileNameWithoutPath1;
+                textBox2.Text = fileNameWithoutPath2;
             }
             catch (Exception ex)
             {
