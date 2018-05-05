@@ -88,7 +88,7 @@ namespace multimedia
                 return;
             }
 
-            for (int i = 0; i < Math.Min(text1.Length, text2.Length); i++)
+            for (int i = 0; i < text1.Length; i++)
             {
                 if (text1[i] != text2[i])
                 {
@@ -105,6 +105,11 @@ namespace multimedia
             fr1.Close();
             sr2.Close();
             fr2.Close();
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

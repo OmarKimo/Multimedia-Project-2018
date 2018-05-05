@@ -39,9 +39,10 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(40, 30);
+            this.button1.Location = new System.Drawing.Point(53, 37);
+            this.button1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(100, 42);
+            this.button1.Size = new System.Drawing.Size(133, 52);
             this.button1.TabIndex = 0;
             this.button1.Text = "Choose file 1";
             this.button1.UseVisualStyleBackColor = true;
@@ -49,9 +50,10 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(40, 113);
+            this.button2.Location = new System.Drawing.Point(53, 139);
+            this.button2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(100, 42);
+            this.button2.Size = new System.Drawing.Size(133, 52);
             this.button2.TabIndex = 1;
             this.button2.Text = "Choose file 2";
             this.button2.UseVisualStyleBackColor = true;
@@ -59,44 +61,50 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(166, 121);
+            this.textBox2.Location = new System.Drawing.Point(221, 149);
+            this.textBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBox2.Multiline = true;
             this.textBox2.Name = "textBox2";
             this.textBox2.ReadOnly = true;
-            this.textBox2.Size = new System.Drawing.Size(192, 34);
+            this.textBox2.Size = new System.Drawing.Size(255, 41);
             this.textBox2.TabIndex = 3;
             // 
             // textBox3
             // 
-            this.textBox3.Location = new System.Drawing.Point(166, 38);
+            this.textBox3.Location = new System.Drawing.Point(221, 47);
+            this.textBox3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBox3.Multiline = true;
             this.textBox3.Name = "textBox3";
             this.textBox3.ReadOnly = true;
-            this.textBox3.Size = new System.Drawing.Size(192, 34);
+            this.textBox3.Size = new System.Drawing.Size(255, 41);
             this.textBox3.TabIndex = 4;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(37, 244);
+            this.label1.Location = new System.Drawing.Point(49, 300);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(37, 13);
+            this.label1.Size = new System.Drawing.Size(48, 17);
             this.label1.TabIndex = 5;
             this.label1.Text = "Result";
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(100, 241);
+            this.textBox1.Location = new System.Drawing.Point(133, 297);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(213, 20);
+            this.textBox1.Size = new System.Drawing.Size(283, 22);
             this.textBox1.TabIndex = 6;
+            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(142, 182);
+            this.button3.Location = new System.Drawing.Point(189, 224);
+            this.button3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(58, 40);
+            this.button3.Size = new System.Drawing.Size(77, 49);
             this.button3.TabIndex = 7;
             this.button3.Text = "start";
             this.button3.UseVisualStyleBackColor = true;
@@ -104,9 +112,9 @@
             // 
             // Form2
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(383, 281);
+            this.ClientSize = new System.Drawing.Size(511, 346);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label1);
@@ -114,6 +122,7 @@
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "Form2";
             this.Text = "Check";
             this.ResumeLayout(false);
