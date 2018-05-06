@@ -228,6 +228,7 @@ namespace multimedia
         public static IList<int> Coding(string input) //given string , output code
         {
 
+            mymax = 1 << maxbit;
             IList<int> mylist = new List<int>();
             Dictionary<string, int> dict = new Dictionary<string, int>();
             int index = 0, last = 0, x = 1, slast = 0;
