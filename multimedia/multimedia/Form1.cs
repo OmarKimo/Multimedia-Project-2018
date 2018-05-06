@@ -153,30 +153,13 @@ namespace multimedia
         private void Process(string text)
         {
             EncodedText = Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(text));
-            string uniqueChars = String.Join("", EncodedText.Distinct());
-            tmpText += uniqueChars;
+            string uniqueChars = String.Join("", EncodedText.Distinct()); 
           
             foreach (char ch in uniqueChars)
             {
                 int count = text.Count(f => f == ch);
                 allCharsDict[ch] = count;
-                
             }
-            
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-           
-        }
-
-        private byte[] GetBytes(string bitString)
-        {
-            return Enumerable.Range(0, bitString.Length / 8).
-                Select(pos => Convert.ToByte(
-                    bitString.Substring(pos * 8, 8),
-                    2)
-                ).ToArray();
         }
 
         private void unCompress_Click(object sender, EventArgs e)
@@ -222,9 +205,6 @@ namespace multimedia
                         Text.Add(add[j]);
                     }
                 }
-
-
-
 
                 lzw.Main(allCharsDict.Keys.ToList());
                 string DecodedText = lzw.deCoding(lzw.convertint(Text));
