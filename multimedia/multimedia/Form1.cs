@@ -31,7 +31,8 @@ namespace multimedia
             for (int i = 0; i < 20; i++)
             {
                 //paths.Add("D:\\Major & Interests\\Github Repositories & My Projects\\Multimedia-Project-2018\\DataSet\\DataSet_" + (i + 1).ToString() + ".tsv");
-
+                //paths.Add("C:\\Multimedia-Project-2018\\DataSet\\DataSet_" + (i + 1).ToString() + ".tsv");
+                //paths.Add("D:\\Newfolder\\Multimedia-Project-2018\\DataSet\\DataSet_" + (i + 1).ToString() + ".tsv");
                 paths.Add("D:\\Computer department\\cairo university\\Assembly game\\Multimedia-Project-2018\\DataSet\\DataSet_" + (i + 1).ToString() + ".tsv");
 
             }
@@ -105,28 +106,20 @@ namespace multimedia
 
                 Process(textToBeCompressed);
 
-                //Huffman.build(allCharsDict);
-                //Huffman.extendhuffman();
-                //string binarizedChars = Huffman.codeData(textToBeCompressed);
-
                 lzw.Main(allCharsDict.Keys.ToList());
                 IList<int> binarized = lzw.Coding(textToBeCompressed);
                 IList<char> binarizedChars = lzw.convertbinary(binarized);
+
+                #region comment
+                //Huffman.build(allCharsDict);
+                //string binarizedChars = Huffman.codeData(textToBeCompressed);
+
                 //binarizedChars = runlength.main(binarizedChars);
                 //binarizedChars= optmize.main(binarizedChars);
                 
-                /*
-                string x = lzw.deCoding(lzw.convertint(binarizedChars));
-                if (x.Length != textToBeCompressed.Length)
-                {
-                    int y = 0;
-                    y++;
-                }*/
-                
-                
                 //arthmitc.Main(allCharsDict.Keys.ToList(), allCharsDict.Values.ToList());
                 //string binarizedChars = arthmitc.buildbinary(textToBeCompressed, allCharsDict.Values.ToList());
-
+                #endregion 
 
                 FileStream file = new FileStream(fileNameWithPath.Split('.').First() + ".bin", FileMode.Create);
                 BinaryWriter binaryFile = new BinaryWriter(file, Encoding.UTF8);
@@ -210,7 +203,6 @@ namespace multimedia
                     {
                         br.Close();
                         fr.Close();
-                        //binText.RemoveAt(binText.Count - 1);
                         break;
                     }
                 }
@@ -237,9 +229,7 @@ namespace multimedia
 
 
                 lzw.Main(allCharsDict.Keys.ToList());
-                //Text = optmize.back(Text);
-                IList<char> DecodedText = lzw.deCoding(lzw.convertint(Text));
-
+                string DecodedText = lzw.deCoding(lzw.convertint(Text));
                 FileStream file = new FileStream(fileNameWithPath.Split('.').First() + "_1.txt", FileMode.Create);
                 StreamWriter DecodedFile = new StreamWriter(file);
                 DecodedFile.Write(DecodedText);

@@ -89,7 +89,7 @@ namespace multimedia
         }
 
         //given code , output the decompressed string
-        public static IList<char> deCoding(IList<int> input) 
+        public static string deCoding(IList<int> input) 
         {
             #region validtion
             if (input == null || input.Count == 0)
@@ -101,7 +101,7 @@ namespace multimedia
             #endregion
 
             #region initial all needed variable
-            IList<char> res = new List<char>();//to store the result
+            string res = "";//to store the result
             // intial current dictionary
             IList<string> Dict = new List<string>(); 
             for (int i = 0; i < LetterDict.Count; i++)
@@ -113,8 +113,7 @@ namespace multimedia
             for (int i = 1; i < input.Count; i++)
             {
                 //add last block
-                for (int j = 0; j < last.Length; j++)
-                    res.Add(last[j]);
+                res += last;
                 //add new block to dictionary
                 if (input[i] == Dict.Count)
                     Dict.Add(last + last[0]);
@@ -124,8 +123,7 @@ namespace multimedia
                 last = Dict[input[i]];
             }
             //add last block
-            for (int j = 0; j < last.Length; j++)
-                res.Add(last[j]);
+            res += last;
             return res;
             #endregion
         }
@@ -244,7 +242,6 @@ namespace multimedia
         #region variable
         static public int numberofextend; //number of extended huffman
         static private IList<Node> huffmanlist; //include all letter with thier code
-        public static int len;
         #endregion
 
         #region function
@@ -333,8 +330,6 @@ namespace multimedia
 
         }
         
-
-        
         //this number will increase if the gab between the nomber of rebeat letter decrease
         public static long callength() 
         {
@@ -348,35 +343,62 @@ namespace multimedia
             return res;
         }
 
-        public static IList<char> codeData(IList<char> input)  //given data ,output code
+        //given data ,output compressed code
+        public static IList<char> codeData(IList<char> input)
         {
-            IList<char> res = new List<char>();
-            Dictionary<string, string> dict = new Dictionary<string, string>();
+
+            #region validtion
+            if (input == null || input.Count == 0)
+                return null;
+            if (huffmanlist == null || huffmanlist.Count == 0)
+                return null;
+            #endregion 
+
+            #region intial variable
+            IList<char> res = new List<char>(); //final result code 
+            Dictionary<string, string> dict = new Dictionary<string, string>(); //add huffman list to dictionary for 
             for (int i = 0; i < huffmanlist.Count; i++)
                 dict.Add(huffmanlist[i].data, huffmanlist[i].code);
-            string curr = "";
+            string curr = ""; //current string
+            string newres="";
+            #endregion 
+
+            #region main algorithm
             for (int i = 0; i < input.Count; i++)
             {
                 curr += input[i];
-                if (curr.Length == len)
+                if (dict.TryGetValue(curr,out newres)) 
                 {
-                    string newres = dict[curr];
+                    //if found add them to result
                     for (int k = 0; k < newres.Length; k++)
                         res.Add(newres[k]);
                     curr = "";
                 }
             }
             return res;
+            #endregion 
         }
 
         public static IList<char> DecodeData(IList<char> input) //given code ,output data
         {
+
+            #region validtion
+            if (input == null || input.Count == 0)
+                return null;
+            if (huffmanlist == null || huffmanlist.Count == 0)
+                return null;
+            #endregion 
+
+            #region intial variable
             int x = 0;
             Dictionary<string, string> dict = new Dictionary<string, string>();
             for (int i = 0; i < huffmanlist.Count; i++)
                 dict.Add(huffmanlist[i].code, huffmanlist[i].data);
             IList<char> res = new List<char>();
             string curr = "",newres="";
+            #endregion
+
+            #region main algorithm
             while (x >= input.Count)
             {
                 //add current code
@@ -384,17 +406,23 @@ namespace multimedia
                 //search on current code on the list 
                 if (dict.TryGetValue(curr, out newres))
                 {
+                    //if found add them to the result
                     for (int k = 0; k < newres.Length; k++)
                         res.Add(newres[k]);
+                    curr = "";
                 }
             }
             return res;
+            #endregion 
+
         }
 
         public static void extendhuffman()// build extend huffman code 
         {
-            if (numberofextend == null)
+            if (huffmanlist == null || huffmanlist.Count < 2)
                 return;
+
+            #region intial variable
             numberofextend++;
             IList<Node> newlist = new List<Node>();
             //build new list
@@ -405,8 +433,9 @@ namespace multimedia
                     newlist.Add(new Node(huffmanlist[i].data + huffmanlist[j].data, huffmanlist[i].number * huffmanlist[j].number));
                 }
             }
+            #endregion
 
-
+            #region main algorithm
             //build the tree
             Stack<Node> stack = SortStack(newlist);
             while (stack.Count > 1)
@@ -420,23 +449,20 @@ namespace multimedia
                 //sort again
                 stack = SortStack(stack.ToList<Node>());
             }
-
-            Node parentNode1 = stack.Pop();
+            huffmanlist.Clear();
             huffmanlist = new List<Node>();
-            GenerateCode(parentNode1);
-            //for debug
-            //huffmanlist = huffmanlist.OrderByDescending(o => o.number).ToList();
-
+            GenerateCode(stack.Pop());
+            #endregion 
         }
         #endregion
     }
 
-
     class letter
     {
-        public double upper;
-        public double lower;
-        public string data;
+        //for represent symple in arithmetic coding
+        public double upper; //upper range
+        public double lower; //lower range
+        public string data; //the original data
         public letter(string data, double up, double low)
         {
             this.data = data;
@@ -446,73 +472,120 @@ namespace multimedia
         }
     }
 
-    class arthmitc
+    class arithmetic
     {
+        //for arithmetic coding technique
         #region variable
-        static public IList<letter> arthmitclist;
-        static public int number;
+        static public IList<letter> arthmitclist; //include all letter 
+        //static public int number; //number of all letter
         #endregion
 
         #region function
-        public static void Main(IList<string> input, IList<int> array) //given array of string & array of number of each string
+
+        //given array of string & array of number of each string
+        public static void build(IList<string> input, IList<int> array)
         {
+            #region validtion
+            if (input == null || array == null)
+                return;
+            if (input.Count < 2 || array.Count < 2 || array.Count != input.Count)
+                return;
+            #endregion 
+
+            #region intial variable 
             arthmitclist = new List<letter>();
             int sum = 0;
             for (int i = 0; i < array.Count; i++)
                 sum += array[i];
-            number = sum;
             double curr = 0.0;
+            #endregion
+
             for (int i = 0; i < array.Count; i++)
             {
                 arthmitclist.Add(new letter(input[i], (curr + array[i]) / sum, curr / sum));
                 curr += array[i];
-
             }
         }
 
+        //given string , return compressed binary code
         public static IList<char> buildbinary(IList<char> input)
         {
+            #region validtion
+            if (input == null || input.Count == 0)
+                return null;
+            if (arthmitclist == null || arthmitclist.Count < 2)
+                return null;
+            #endregion
+
+            #region intial variable
             IList<char> res = new List<char>();
             IList<Double> x = new List<Double>();
+            #endregion
+
+            #region main algorithm
             x = codeData(input);
             for (int i = 0; i < x.Count; i++)
             {
-                string curr = arthmitc.doubletobinary(x[i]);
+                string curr = arithmetic.doubletobinary(x[i]);
                 for(int j=0;j<curr.Length;j++)
                     res.Add(curr[j]);
             }
             return res;
+            #endregion
+
         }
 
+        //given compressed binary code , return string 
         public static IList<char> buildstring(IList<char> input)
         {
+            #region validtion
+            if (input == null || input.Count == 0)
+                return null;
+            if (arthmitclist == null || arthmitclist.Count < 2)
+                return null;
+            #endregion
+
             IList<char> res =new List<char>();
             int x = 0;
+
             while (x < input.Count)
             {
                 string curr = "";
                 for (int i = 0; i < 64; i++)
                     curr += input[x++];
-                string s=arthmitc.decodeData(arthmitc.Binarytodouble(curr));
+                string s = arithmetic.decodeData(arithmetic.Binarytodouble(curr));
                 for (int j = 0; j < s.Length; j++)
                     res.Add(s[j]);
             }
             return res;
         }
 
-        public static IList<double> codeData(IList<char> input) //given data ,output code
+        //given data ,output list of double
+        public static IList<double> codeData(IList<char> input) 
         {
-            IList<double> list = new List<double>();
+
+            #region validtion
+            if (input == null || input.Count == 0)
+                return null;
+            if (arthmitclist == null || arthmitclist.Count < 2)
+                return null;
+            #endregion
+
+            #region intial variable
+            IList<double> res = new List<double>();
             IList<letter> mylist = new List<letter>();
             Dictionary<string, int> dict = new Dictionary<string, int>();
             for (int i = 0; i < arthmitclist.Count; i++)
             {
-               mylist.Add( new letter(arthmitclist[i].data, arthmitclist[i].upper, arthmitclist[i].lower));
+                mylist.Add( new letter(arthmitclist[i].data, arthmitclist[i].upper, arthmitclist[i].lower));
                 dict.Add(mylist[i].data, i);
             }
             double up = 1, down = 0;
             string curr = "";
             int x = 0,last=0;
+            #endregion 
+
+            #region main algorithm 
             for (int i = 0; i < input.Count; i++)
             {
                 curr += input[i];
@@ -524,7 +597,7 @@ namespace multimedia
                         double ratio = up - down;
                         if (x++ >= 8) //end of coding  need to change
                         {
-                            list.Add((up + down) / 2.0);
+                            res.Add((up + down) / 2.0);
                             up = 1;
                             down = 0;
                             mylist.Clear();
@@ -538,14 +611,23 @@ namespace multimedia
                         }
                     }
             }
-            return list;
+            return res;
+            #endregion
+
         }
 
-        public static string decodeData(double input) //given double & the last symple in the text ,output data  for each double
+        //given double ,output data  for each double
+        public static string decodeData(double input) 
         {
-            if (input == null /*|| end == null*/)
-                return null;
 
+            #region validtion
+            if (input < 0)
+                return null;
+            if (arthmitclist == null || arthmitclist.Count < 2)
+                return null;
+            #endregion
+
+            #region intial 
             string res = "";
             IList<letter> artlist = new List<letter>();
             for (int i = 0; i < arthmitclist.Count; i++)
@@ -553,6 +635,9 @@ namespace multimedia
                 artlist.Add(new letter(arthmitclist[i].data, arthmitclist[i].upper, arthmitclist[i].lower));
             }
             int x = 0;
+            #endregion
+
+            #region main algorithm
             while (true)
             {
 
@@ -574,8 +659,11 @@ namespace multimedia
                     }
                 }
             }
+            #endregion
+
         }
 
+        //convert double to binary 
         public static string doubletobinary(double x)
         {
             long m = BitConverter.DoubleToInt64Bits(x);
@@ -583,6 +671,7 @@ namespace multimedia
             return str;
         }
 
+        //convert binary to double
         public static double Binarytodouble(string str)
         {
 
@@ -593,16 +682,32 @@ namespace multimedia
         #endregion
     }
 
-
     class runlength
     {
+        //convert binary seqance to number of 1 and 0 in sequence 
+        #region variable
         public static int maxbit = 3;
+        #endregion
 
-        public static IList<char> main(IList<char> input)
+        #region function
+
+        public static IList<char> build(IList<char> input)
         {
-            IList<char> res = new List<char>();
-            bool test = false;
-            int curr = 0,num=0;
+            #region validtion 
+            if (maxbit < 1)
+                return null;
+            if (input == null || input.Count < maxbit)
+                return null;
+            #endregion
+
+            #region intial 
+            IList<char> res = new List<char>(); //final result
+            bool test = false;                  //for switch between 1 and 0
+            int curr = 0;                       // number for switch between 1 and 0
+            int num = 0;                       //number of repeated 0 or 1 untill now
+            #endregion
+
+            #region main algorithm
             for (int i = 0; i < input.Count; i++)
             {
                 if (test)
@@ -636,22 +741,35 @@ namespace multimedia
  
             }
             return res;
- 
+            #endregion
 
         }
 
         public static IList<char> back(IList<char> input)
         {
+            #region validtion
+            if (maxbit < 1)
+                return null;
+            if (input == null || input.Count < maxbit)
+                return null;
+            #endregion
+
+            #region intial variable 
             IList<char> res = new List<char>();
             bool test = false;
             int len = (1 << maxbit);
             string curr = "";
+            #endregion
+
+            #region main algorithm 
             for (int i = 0; i < input.Count; i++)
             {
                 curr += input[i];
                 if (curr.Length == maxbit)
                 {
+                    //number found
                     int y = Convert.ToInt16(curr);
+                    //decide which char will be represent
                     char s;
                     if (test)
                         s = '1';
@@ -664,28 +782,46 @@ namespace multimedia
                 }
             }
             return res;
+            #endregion
+
         }
 
+        #endregion 
     }
 
     class optmize
     {
+        //for compress the binary seqance
         #region variable
-        static public IList<string> mychar;
-        static public int length = 8;
+        static private IList<string> mychar; //include all possible sequance 
+        static public int length = 8; 
         #endregion
 
         #region function
-        static public IList<char> main(IList<char> input)
+        //compress  the binary seqance
+        static public IList<char> build(IList<char> input)
         {
+
+            #region validtion
+            if (input == null || input.Count == 0)
+                return null;
+            if (mychar == null || mychar.Count < 1)
+                return null;
+            if (length < 1)
+                return null;
+            #endregion
+
+            #region initial variable
             IList<char> res = new List<char>();
             mychar = new List<string>();
             optmize g = new optmize();
             g.generate("", length);
+
             Dictionary<string, int> currlist = new Dictionary<string, int>();
             for (int i = 0; i < mychar.Count; i++)
                 currlist.Add(mychar[i], 0);
             string curr = "";
+            //count number of rebeat for each sequance 
             for (int i = 0; i < input.Count; i++)
             {
                 curr += input[i];
@@ -695,8 +831,12 @@ namespace multimedia
                     curr = "";
                 }
             }
-            Huffman.build(currlist);
             IList<int> dict = new List<int>();
+            Huffman.build(currlist);
+            #endregion 
+
+           
+            //convert each number of rebeat to binary 
             for (int i = 0; i < currlist.Count; i++)
             {
                 int x = currlist.ToList()[i].Value;
@@ -705,15 +845,12 @@ namespace multimedia
                 for (int j = 0; j < binary.Length; j++)
                     res.Add(binary[j]);
             }
-            //long lengthhuffman = Huffman.callength();
+
             /*arthmitc.Main(mychar, dict);
             IList<char> newcurr = arthmitc.buildbinary(input);
             for (int i = 0; i < newcurr.Count; i++)
                 res.Add(newcurr[i]);*/
 
-
-
-            Huffman.len = length;
             IList<char> newres = Huffman.codeData(input);
             for (int i = 0; i < newres.Count; i++)
                 res.Add(newres[i]);
@@ -723,8 +860,18 @@ namespace multimedia
             return res;
         }
 
+        //decompress  the binary seqance
         static public IList<char> back(IList<char> input)
         {
+            #region validtion
+            if (input == null || input.Count == 0)
+                return null;
+            if (mychar == null || mychar.Count < 1)
+                return null;
+            if (length < 1)
+                return null;
+            #endregion
+
             IList<char> res = new List<char>();
             mychar = new List<string>();
             optmize g = new optmize();
@@ -743,22 +890,23 @@ namespace multimedia
                     mynum = "";
                 }
             }
-            arthmitc.Main(mychar, dict);
-            res = arthmitc.buildstring(input);
+            arithmetic.build(mychar, dict);
+            res = arithmetic.buildstring(input);
 
             return res;
         }
 
+        //genrate all possible sequance 
         private void generate(string x, int y)
         {
             if (y == 0)
-            {
                 mychar.Add(x);
-                return;
+            else {
+                y--;
+                generate(x + '0', y);
+                generate(x + '1', y);
             }
-            y--;
-            generate(x + '0', y);
-            generate(x + '1', y);
+           
         }
         #endregion
     }
