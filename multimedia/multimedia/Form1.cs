@@ -237,14 +237,8 @@ namespace multimedia
 
 
                 lzw.Main(allCharsDict.Keys.ToList());
-                //(Huffman.returncode(Text)
                 //Text = optmize.back(Text);
                 IList<char> DecodedText = lzw.deCoding(lzw.convertint(Text));
-
-                //string DecodedText = Huffman.DecodeData(string.Join("", Text.ToArray()), generalChars);
-
-                //arthmitc.Main(allCharsDict.Keys.ToList(), allCharsDict.Values.ToList());
-                //string DecodedText = arthmitc.buildstring(string.Join("",Text.ToArray()), allCharsDict.Keys.ToList());
 
                 FileStream file = new FileStream(fileNameWithPath.Split('.').First() + "_1.txt", FileMode.Create);
                 StreamWriter DecodedFile = new StreamWriter(file);

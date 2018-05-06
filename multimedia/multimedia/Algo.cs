@@ -112,8 +112,10 @@ namespace multimedia
             #region main algorithm
             for (int i = 1; i < input.Count; i++)
             {
+                //add last block
                 for (int j = 0; j < last.Length; j++)
                     res.Add(last[j]);
+                //add new block to dictionary
                 if (input[i] == Dict.Count)
                     Dict.Add(last + last[0]);
                 else
@@ -121,62 +123,101 @@ namespace multimedia
 
                 last = Dict[input[i]];
             }
+            //add last block
             for (int j = 0; j < last.Length; j++)
                 res.Add(last[j]);
             return res;
             #endregion
         }
 
-        public static IList<char> convertbinary(IList<int> input) //convert int list to binary code
+        //convert integer list to binary code
+        public static IList<char> convertbinary(IList<int> input) 
         {
+            #region validtion
+            if (input == null || input.Count == 0)
+                return null;
+            if (maxbit < 0 || maxbit > 32)
+                maxbit = 20;
+            if (LetterDict.Count <= 1)
+                return null;
+            #endregion
+
+            #region intial variable
             IList<char> res = new List<char>();
             int maxcurr = Convert.ToString(LetterDict.Count, 2).Length;
             int x = LetterDict.Count;
+            #endregion
+
+            #region main algorithm
             for (int i = 0; i < input.Count; i++)
             {
+                //convert int to binary string 
                 string binary = Convert.ToString(input[i], 2).PadLeft(maxcurr, '0');
+                //add it to final result
                 for (int j = 0; j < binary.Length; j++)
                     res.Add(binary[j]);
+                //update size of int 
                 maxcurr = Convert.ToString(++x, 2).Length < maxbit ? Convert.ToString(x, 2).Length : maxbit;
             }
+            //the length must be divisable by 8 to store it as byte
+            //if not add zeroes until it is
             while (res.Count % 8 != 0)
                 res.Add('0');
             return res;
+            #endregion
         }
 
-        public static IList<int> convertint(IList<char> input) //convert code binary to int
+        //convert binary to int list
+        public static IList<int> convertint(IList<char> input) 
         {
-            IList<int> res = new List<int>();
-            int maxcurr = Convert.ToString(LetterDict.Count, 2).Length;
-            int x = LetterDict.Count;
-            int curr = 0;
-            string mynum = "";
-            for (; curr < input.Count; curr++)
+            #region validtion
+            if (input == null || input.Count == 0)
+                return null;
+            if (maxbit < 0 || maxbit > 32)
+                maxbit = 20;
+            if (LetterDict.Count <= 1)
+                return null;
+            #endregion
+
+            #region intial variable 
+            IList<int> res = new List<int>(); // final result array of integer
+            int maxcurr = Convert.ToString(LetterDict.Count, 2).Length;//size of integer
+            int x = LetterDict.Count; //count for know max length for current integer
+            string mynum = ""; //current string
+            #endregion 
+
+            #region main algorithm
+            for (int curr = 0; curr < input.Count; curr++)
             {
                 mynum += input[curr];
                 if (mynum.Length == maxcurr)
                 {
-                    res.Add(Convert.ToInt32(mynum, 2));
+                    //add to fianl result
+                    res.Add(Convert.ToInt32(mynum, 2)); 
                     mynum = "";
+                    //update max length of integer
                     maxcurr = Convert.ToString(++x, 2).Length < maxbit ? Convert.ToString(x, 2).Length : maxbit;
                 }
 
             }
             return res;
+            #endregion 
         }
         #endregion
     }
 
     class Node
     {
+        //for save probrities of symple at huffman coding
         #region variable
-        public int number;
-        public string data;
-        public string code;
-        public Node leftChild, rightChild;
+        public int number;     //number of times that symple appear in the text
+        public string data;     //original symple 
+        public string code;     //huffman code for this symple
+        public Node leftChild, rightChild; //for build huffman tree
         #endregion
 
         #region function
+        //intial build 
         public Node(string data, int number)
         {
             this.data = data;
@@ -187,11 +228,12 @@ namespace multimedia
 
         }
 
+        //advance build
         public Node(Node leftChild, Node rightChild)
         {
             this.leftChild = leftChild;
             this.rightChild = rightChild;
-            this.data = leftChild.data + rightChild.data; //for debug >>can remove it
+            this.data = leftChild.data + rightChild.data; 
             this.number = leftChild.number + rightChild.number;
         }
         #endregion
@@ -200,17 +242,19 @@ namespace multimedia
     class Huffman
     {
         #region variable
-        static public int numberofextend; //no of extend huffman
+        static public int numberofextend; //number of extended huffman
         static private IList<Node> huffmanlist; //include all letter with thier code
-        static private IList<int> dict;
         public static int len;
         #endregion
 
         #region function
-        static public IList<Node> Gethuffman() //tested
-        {//get copy of list
-            IList<Node> newlist = new List<Node>();
 
+        //get copy of the list
+        static public IList<Node> Gethuffman() 
+        {
+            if(huffmanlist==null)
+                return null;
+            IList<Node> newlist = new List<Node>();
             for (int i = 0; i < huffmanlist.Count; i++)
             {
                 Node tempNode = huffmanlist[i];
@@ -218,44 +262,51 @@ namespace multimedia
             }
             return newlist;
         }
-        static public void build(Dictionary<string, int> input/*IList<string> input, IList<int> array*/) //tested
-        {//give them array of string & array of number of each string
-            IList<Node> list = new List<Node>();
+
+        //build huffman tree giveen array of string & array of number of each string
+        static public void build(Dictionary<string, int> input) 
+        {
+
+            if (input == null|| input.Count<=1)
+                return;
+
+            #region intial variable 
+            IList<Node> list = new List<Node>(); //list for build huffman tree 
             numberofextend = 0;
-            dict = new List<int>();
             huffmanlist = new List<Node>();
             for (int i = 0; i < input.Count; i++)
             {
                 int value = input.ToList()[i].Value; //array[i]
                 string key = input.ToList()[i].Key; //input[i]
-                dict.Add(value);
                 if (value != 0)
                     list.Add(new Node(key, value));
             }
+            #endregion
 
-            //build the tree
-            Stack<Node> stack = GetSortedStack(list);
+            #region main algorithm 
+            //build the huffman tree
+            Stack<Node> stack = SortStack(list);
             while (stack.Count > 1)
             {
-                //move last 2 least number
+                //move last 2 least number (less number)
                 Node leftChild = stack.Pop();
                 Node rightChild = stack.Pop();
                 //repalce them with the sum of them 
                 Node parentNode = new Node(leftChild, rightChild);
                 stack.Push(parentNode);
                 //sort again
-                stack = GetSortedStack(stack.ToList<Node>());
+                stack = SortStack(stack.ToList<Node>());
             }
             if (stack.Count == 1)
-            {
-                Node parentNode1 = stack.Pop();
-                GenerateCode(parentNode1);
-            }
-            huffmanlist = huffmanlist.OrderByDescending(o => o.number).ToList();
+                GenerateCode(stack.Pop()); //give all of them thier code
+            #endregion
         }
-        
-        public static Stack<Node> GetSortedStack(IList<Node> list) //sort thd probability
+
+        //sort the list Order By number
+        public static Stack<Node> SortStack(IList<Node> list) 
         {
+            if (list == null)
+                return null;
             //sort the nodes
             List<Node> SortedList = list.OrderByDescending(o => o.number).ToList();
             //make new array for store the new value 
@@ -265,14 +316,13 @@ namespace multimedia
             return stack;
         }
 
-        public static void GenerateCode(Node parentNode) //tested
-        { //after build tree , apply this function on the parent node to get the code for each symple
+        //after build tree , apply this function on the parent node to get the code for each childern
+        public static void GenerateCode(Node parentNode) 
+        {
             if (parentNode == null)
                 return;
             else if (parentNode.leftChild == null)
-            {
                 huffmanlist.Add(parentNode);
-            }
             else
             {
                 parentNode.leftChild.code = parentNode.code + "0";
@@ -282,14 +332,19 @@ namespace multimedia
             }
 
         }
+        
 
-        public static long callength() //must be less than the original size
-        { //this number will increase if the gab between the no of rebeat letter decrease
-            long res = (18 * dict.Count());//size of dict
+        
+        //this number will increase if the gab between the nomber of rebeat letter decrease
+        public static long callength() 
+        {
+            if (huffmanlist == null)
+                return 0;
+            long res = (18 * huffmanlist.Count()); //size of dict
             for (int i = 0; i < huffmanlist.Count; i++)
-            {
                 res += (huffmanlist[i].number * huffmanlist[i].code.Length);
-            }
+
+            //should be less than the original size
             return res;
         }
 
@@ -353,7 +408,7 @@ namespace multimedia
 
 
             //build the tree
-            Stack<Node> stack = GetSortedStack(newlist);
+            Stack<Node> stack = SortStack(newlist);
             while (stack.Count > 1)
             {
                 //move last 2 least number
@@ -363,7 +418,7 @@ namespace multimedia
                 Node parentNode = new Node(leftChild, rightChild);
                 stack.Push(parentNode);
                 //sort again
-                stack = GetSortedStack(stack.ToList<Node>());
+                stack = SortStack(stack.ToList<Node>());
             }
 
             Node parentNode1 = stack.Pop();
