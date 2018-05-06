@@ -19,6 +19,7 @@ namespace multimedia
         private string EncodedText;
         private IList<string> paths;
         private Dictionary<char, int> allCharsDict;
+        private string uniqueCharSet;
         public Form1()
         {
             InitializeComponent();
@@ -35,6 +36,7 @@ namespace multimedia
 
             }
             allCharsDict = new Dictionary<char, int>();
+            uniqueCharSet = "";
             init(allCharsDict);
             EncodedText = "";
         }
@@ -63,25 +65,17 @@ namespace multimedia
 
         private void init(Dictionary<char, int> chars)
         {
+            FileStream file = new FileStream("all Unique Chars.txt", FileMode.Open, FileAccess.Read);
+            StreamReader sr = new StreamReader(file, Encoding.UTF8);
 
-            string txt = "";
-            for (int i = 0; i < 20; i++)
-            {
-                FileStream fr = new FileStream(paths[i], FileMode.Open, FileAccess.Read);
-                StreamReader sr = new StreamReader(fr);
-                txt += sr.ReadToEnd();
-                txt = String.Join("", txt.Distinct());
-                sr.Close();
-                fr.Close();
-            }
-            FileStream file = new FileStream("all Unique Chars.txt", FileMode.Create);
-            StreamWriter of = new StreamWriter(file);
-            of.Write(txt);
-            foreach (char ch in txt)
+            uniqueCharSet = sr.ReadToEnd();
+
+            foreach (char ch in uniqueCharSet)
             {
                 allCharsDict.Add(ch, 0);
             }
-            of.Close();
+
+            sr.Close();
             file.Close();
         }
 
@@ -114,10 +108,10 @@ namespace multimedia
 
                 //binarizedChars = runlength.main(binarizedChars);
                 //binarizedChars= optmize.main(binarizedChars);
-                
+
                 //arthmitc.Main(allCharsDict.Keys.ToList(), allCharsDict.Values.ToList());
                 //string binarizedChars = arthmitc.buildbinary(textToBeCompressed, allCharsDict.Values.ToList());
-                #endregion 
+                #endregion
 
                 FileStream file = new FileStream(fileNameWithPath.Split('.').First() + ".bin", FileMode.Create);
                 BinaryWriter binaryFile = new BinaryWriter(file, Encoding.UTF8);
@@ -152,7 +146,7 @@ namespace multimedia
         {
             EncodedText = Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(text));
             string uniqueChars = String.Join("", EncodedText.Distinct());
-          
+
             foreach (char ch in uniqueChars)
             {
                 int count = text.Count(f => f == ch);
