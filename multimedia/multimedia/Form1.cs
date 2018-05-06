@@ -114,7 +114,7 @@ namespace multimedia
                 IList<char> binarizedChars = lzw.convertbinary(binarized);
                 //binarizedChars = runlength.main(binarizedChars);
                 //binarizedChars= optmize.main(binarizedChars);
-                //IList<char> binarizedChars = Huffman.applyhuffman(binarizedChars1);
+                
                 /*
                 string x = lzw.deCoding(lzw.convertint(binarizedChars));
                 if (x.Length != textToBeCompressed.Length)
@@ -239,7 +239,7 @@ namespace multimedia
                 lzw.Main(allCharsDict.Keys.ToList());
                 //(Huffman.returncode(Text)
                 //Text = optmize.back(Text);
-                string DecodedText = lzw.deCoding(lzw.convertint(Text));
+                IList<char> DecodedText = lzw.deCoding(lzw.convertint(Text));
 
                 //string DecodedText = Huffman.DecodeData(string.Join("", Text.ToArray()), generalChars);
 

@@ -7,13 +7,176 @@ using System.Threading.Tasks;
 
 namespace multimedia
 {
+    class lzw
+    {
+        //this class are implemnted for LZW algorithm 
+        #region variable
+        //base dictionary include all letter
+        public static IList<char> LetterDict; 
+        //max size for each integer
+        public static int mymax = 1 << 20;
+        //the max limit of our dictionary 
+        public static int maxbit = 20;
+        #endregion
+
+        #region function
+        //given array of char to initil dictionary
+        public static void Main(IList<char> input) 
+        {
+            if (input == null)
+                return;
+            //fill letterdict with all letter in the data set
+            LetterDict = new List<char>();
+            for (int i = 0; i < input.Count; i++)
+                LetterDict.Add(input[i]);
+
+        }
+        
+        //given string , output compressed code
+        public static IList<int> Coding(string input) 
+        {
+            #region validtion
+            if (input == null || input.Length == 0)
+                return null;
+            if (maxbit < 0|| maxbit>32)
+                maxbit = 20;
+            if (LetterDict.Count <= 1)
+                return null;
+            #endregion
+
+            #region initial all needed variable
+            mymax = 1 << maxbit;
+            IList<int> res = new List<int>(); //array to save result
+            Dictionary<string, int> dict = new Dictionary<string, int>(); //current dictionary ,change typefor quickly search in dictionary
+            int index = 0; //count for Dictionary
+            int x = 1; //pointer for current element to add
+            int last = 0, slast = 0; //to save the information about last block found for remove it 
+            //fill the current dictionary
+            while (index < LetterDict.Count)
+                dict.Add(LetterDict[index].ToString(), index++);
+            //intial current string
+            string curr = input[0] + "";
+            #endregion
+
+            #region main algorithm
+            while (curr.Length > 0)
+            {
+                //find longest sequance that didn't exist in dictionary
+                while (true)
+                {
+                    if (dict.ContainsKey(curr))
+                    {
+                        last = dict[curr];
+                        slast = curr.Length;
+                    }
+                    else
+                        break;
+                    if (x < input.Length)
+                        curr += input[x++];
+                    else
+                        break;
+                }
+                //add the last block found to the result
+                res.Add(last);
+                //add them to dictionary if valied 
+                if (index < mymax && !(dict.ContainsKey(curr))) //max for bit
+                    dict.Add(curr, index++);
+                //remove last block from the string
+                curr = curr.Remove(0, slast);
+            }
+            return res;
+            #endregion
+        }
+
+        //given code , output the decompressed string
+        public static IList<char> deCoding(IList<int> input) 
+        {
+            #region validtion
+            if (input == null || input.Count == 0)
+                return null;
+            if (maxbit < 0 || maxbit > 32)
+                maxbit = 20;
+            if (LetterDict.Count <= 1)
+                return null;
+            #endregion
+
+            #region initial all needed variable
+            IList<char> res = new List<char>();//to store the result
+            // intial current dictionary
+            IList<string> Dict = new List<string>(); 
+            for (int i = 0; i < LetterDict.Count; i++)
+                Dict.Add(LetterDict[i].ToString());
+            string last = Dict[input[0]];
+            #endregion
+
+            #region main algorithm
+            for (int i = 1; i < input.Count; i++)
+            {
+                for (int j = 0; j < last.Length; j++)
+                    res.Add(last[j]);
+                if (input[i] == Dict.Count)
+                    Dict.Add(last + last[0]);
+                else
+                    Dict.Add(last + Dict[input[i]][0]);
+
+                last = Dict[input[i]];
+            }
+            for (int j = 0; j < last.Length; j++)
+                res.Add(last[j]);
+            return res;
+            #endregion
+        }
+
+        public static IList<char> convertbinary(IList<int> input) //convert int list to binary code
+        {
+            IList<char> res = new List<char>();
+            int maxcurr = Convert.ToString(LetterDict.Count, 2).Length;
+            int x = LetterDict.Count;
+            for (int i = 0; i < input.Count; i++)
+            {
+                string binary = Convert.ToString(input[i], 2).PadLeft(maxcurr, '0');
+                for (int j = 0; j < binary.Length; j++)
+                    res.Add(binary[j]);
+                maxcurr = Convert.ToString(++x, 2).Length < maxbit ? Convert.ToString(x, 2).Length : maxbit;
+            }
+            while (res.Count % 8 != 0)
+                res.Add('0');
+            return res;
+        }
+
+        public static IList<int> convertint(IList<char> input) //convert code binary to int
+        {
+            IList<int> res = new List<int>();
+            int maxcurr = Convert.ToString(LetterDict.Count, 2).Length;
+            int x = LetterDict.Count;
+            int curr = 0;
+            string mynum = "";
+            for (; curr < input.Count; curr++)
+            {
+                mynum += input[curr];
+                if (mynum.Length == maxcurr)
+                {
+                    res.Add(Convert.ToInt32(mynum, 2));
+                    mynum = "";
+                    maxcurr = Convert.ToString(++x, 2).Length < maxbit ? Convert.ToString(x, 2).Length : maxbit;
+                }
+
+            }
+            return res;
+        }
+        #endregion
+    }
+
     class Node
     {
+        #region variable
         public int number;
         public string data;
         public string code;
         public Node leftChild, rightChild;
+        #endregion
 
+        #region function
         public Node(string data, int number)
         {
             this.data = data;
@@ -31,14 +194,19 @@ namespace multimedia
             this.data = leftChild.data + rightChild.data; //for debug >>can remove it
             this.number = leftChild.number + rightChild.number;
         }
+        #endregion
     }
 
     class Huffman
     {
+        #region variable
         static public int numberofextend; //no of extend huffman
         static private IList<Node> huffmanlist; //include all letter with thier code
         static private IList<int> dict;
         public static int len;
+        #endregion
+
+        #region function
         static public IList<Node> Gethuffman() //tested
         {//get copy of list
             IList<Node> newlist = new List<Node>();
@@ -85,7 +253,7 @@ namespace multimedia
             }
             huffmanlist = huffmanlist.OrderByDescending(o => o.number).ToList();
         }
-
+        
         public static Stack<Node> GetSortedStack(IList<Node> list) //sort thd probability
         {
             //sort the nodes
@@ -168,7 +336,7 @@ namespace multimedia
             return res;
         }
 
-        public static void extendhuffman()//extend huffman code 
+        public static void extendhuffman()// build extend huffman code 
         {
             if (numberofextend == null)
                 return;
@@ -205,130 +373,8 @@ namespace multimedia
             //huffmanlist = huffmanlist.OrderByDescending(o => o.number).ToList();
 
         }
+        #endregion
     }
-
-
-    class lzw
-    {
-        public static IList<char> LetterDict;
-        public static int mymax = 1<<20; //65536 16 // 1048576 20
-        public static int maxbit = 20;
-
-        public static void Main(IList<char> input) //give them array of char to initil dict
-        {
-            //fill letterdict with all letter in the data set
-            LetterDict = new List<char>();
-            for (int i = 0; i < input.Count; i++)
-            {
-                LetterDict.Add(input[i]);
-            }
-
-        }
-
-        public static IList<int> Coding(string input) //given string , output code
-        {
-
-            mymax = 1 << maxbit;
-            IList<int> mylist = new List<int>();
-            Dictionary<string, int> dict = new Dictionary<string, int>();
-            int index = 0, last = 0, x = 1, slast = 0;
-            while (index < LetterDict.Count)
-                dict.Add(LetterDict[index].ToString(), index++);
-            string curr = input[0] + "";
-            while (curr.Length > 0)
-            {
-                while (true)
-                {
-                    if (dict.ContainsKey(curr))
-                    {
-                        last = dict[curr];
-                        slast = curr.Length;
-                    }
-                    else
-                        break;
-                    if (x < input.Length)
-                        curr += input[x++];
-                    else
-                        break;
-                }
-                mylist.Add(last);
-                if (index < mymax && !(dict.ContainsKey(curr))) //max for bit
-                    dict.Add(curr, index++);
-                curr = curr.Remove(0, slast);
-            }
-
-            return mylist;
-
-        }
-
-
-        public static string deCoding(IList<int> input) //given code , output string
-        {
-            string res = "";
-            IList<string> Dict = new List<string>();
-            for (int i = 0; i < LetterDict.Count; i++)
-                Dict.Add(LetterDict[i].ToString());
-            string last = Dict[input[0]];
-
-            for (int i = 1; i < input.Count; i++)
-            {
-                res += last;
-                if (input[i] == Dict.Count)
-                    Dict.Add(last + last[0]);
-                else
-                    Dict.Add(last + Dict[input[i]][0]);
-
-                last = Dict[input[i]];
-            }
-            res += last;
-            int mysize = res.Length;
-            return res;
-        }
-
-
-
-
-        public static IList<char> convertbinary(IList<int> input) //convert int list to binary code
-        {
-            IList<char> res = new List<char>();
-            int maxcurr = Convert.ToString(LetterDict.Count, 2).Length;
-            int x = LetterDict.Count;
-            for (int i = 0; i < input.Count; i++)
-            {
-                string binary = Convert.ToString(input[i], 2).PadLeft(maxcurr, '0');
-                for (int j = 0; j < binary.Length; j++)
-                    res.Add(binary[j]);
-                maxcurr = Convert.ToString(++x, 2).Length < maxbit ? Convert.ToString(x, 2).Length : maxbit;
-            }
-            while (res.Count % 8 != 0)
-                res.Add('0');
-            return res;
-        }
-
-        public static IList<int> convertint(IList<char> input) //convert code binary to int
-        {
-            IList<int> res = new List<int>();
-            int maxcurr = Convert.ToString(LetterDict.Count, 2).Length;
-            int x = LetterDict.Count;
-            int curr = 0;
-            string mynum = "";
-            for (; curr < input.Count; curr++)
-            {
-                mynum += input[curr];
-                if (mynum.Length == maxcurr)
-                {
-                    res.Add(Convert.ToInt32(mynum, 2));
-                    mynum = "";
-                    maxcurr = Convert.ToString(++x, 2).Length < maxbit ? Convert.ToString(x, 2).Length : maxbit;
-                }
-                
-            }
-            return res;
-        }
-
-    }
-
-
 
 
     class letter
@@ -347,9 +393,12 @@ namespace multimedia
 
     class arthmitc
     {
+        #region variable
         static public IList<letter> arthmitclist;
         static public int number;
+        #endregion
 
+        #region function
         public static void Main(IList<string> input, IList<int> array) //given array of string & array of number of each string
         {
             arthmitclist = new List<letter>();
@@ -474,8 +523,6 @@ namespace multimedia
 
         public static string doubletobinary(double x)
         {
-            if (x < 0)
-                return null;
             long m = BitConverter.DoubleToInt64Bits(x);
             string str = Convert.ToString(m, 2);
             return str;
@@ -488,7 +535,7 @@ namespace multimedia
             double x = BitConverter.Int64BitsToDouble(n);
             return Math.Abs(x);
         }
-
+        #endregion
     }
 
 
@@ -538,7 +585,6 @@ namespace multimedia
 
         }
 
-
         public static IList<char> back(IList<char> input)
         {
             IList<char> res = new List<char>();
@@ -569,8 +615,12 @@ namespace multimedia
 
     class optmize
     {
+        #region variable
         static public IList<string> mychar;
         static public int length = 8;
+        #endregion
+
+        #region function
         static public IList<char> main(IList<char> input)
         {
             IList<char> res = new List<char>();
@@ -618,8 +668,6 @@ namespace multimedia
             return res;
         }
 
-
-
         static public IList<char> back(IList<char> input)
         {
             IList<char> res = new List<char>();
@@ -646,7 +694,6 @@ namespace multimedia
             return res;
         }
 
-
         private void generate(string x, int y)
         {
             if (y == 0)
@@ -658,5 +705,6 @@ namespace multimedia
             generate(x + '0', y);
             generate(x + '1', y);
         }
+        #endregion
     }
 }
