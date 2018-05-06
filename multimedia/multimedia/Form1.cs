@@ -17,14 +17,12 @@ namespace multimedia
         private string fileNameWithPath;
         private string fileNameWithoutPath;
         private string EncodedText;
-        private string tmpText;
         private IList<string> paths;
         private Dictionary<char, int> allCharsDict;
         public Form1()
         {
             InitializeComponent();
             generalChars = new List<string>();
-            tmpText = "";
             fileNameWithPath = "";
             fileNameWithoutPath = "";
             paths = new List<string>();
