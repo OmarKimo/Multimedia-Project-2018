@@ -28,3 +28,12 @@ D:\Computer department\cairo university\Assembly game\Multimedia-Project-2018\Wi
 D:\Computer department\cairo university\Assembly game\Multimedia-Project-2018\WithSolution\code\multimedia\bin\Debug\multimedia.exe.config
 D:\Computer department\cairo university\Assembly game\Multimedia-Project-2018\WithSolution\code\multimedia\obj\Debug\multimedia.exe
 D:\Computer department\cairo university\Assembly game\Multimedia-Project-2018\WithSolution\code\multimedia\obj\Debug\multimedia.pdb
+D:\Major & Interests\Github Repositories & My Projects\Multimedia-Project-2018\code\code\multimedia\bin\Debug\multimedia.exe.config
+D:\Major & Interests\Github Repositories & My Projects\Multimedia-Project-2018\code\code\multimedia\bin\Debug\multimedia.exe
+D:\Major & Interests\Github Repositories & My Projects\Multimedia-Project-2018\code\code\multimedia\bin\Debug\multimedia.pdb
+D:\Major & Interests\Github Repositories & My Projects\Multimedia-Project-2018\code\code\multimedia\obj\Debug\multimedia.csprojResolveAssemblyReference.cache
+D:\Major & Interests\Github Repositories & My Projects\Multimedia-Project-2018\code\code\multimedia\obj\Debug\multimedia.Form1.resources
+D:\Major & Interests\Github Repositories & My Projects\Multimedia-Project-2018\code\code\multimedia\obj\Debug\multimedia.Properties.Resources.resources
+D:\Major & Interests\Github Repositories & My Projects\Multimedia-Project-2018\code\code\multimedia\obj\Debug\multimedia.csproj.GenerateResource.Cache
+D:\Major & Interests\Github Repositories & My Projects\Multimedia-Project-2018\code\code\multimedia\obj\Debug\multimedia.exe
+D:\Major & Interests\Github Repositories & My Projects\Multimedia-Project-2018\code\code\multimedia\obj\Debug\multimedia.pdb

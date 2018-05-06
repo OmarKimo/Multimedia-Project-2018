@@ -13,32 +13,18 @@ namespace multimedia
 {
     public partial class Form1 : Form
     {
-        public IList<string> generalChars;
         private string fileNameWithPath;
         private string fileNameWithoutPath;
-        private string EncodedText;
-        private IList<string> paths;
         private Dictionary<char, int> allCharsDict;
         private string uniqueCharSet;
         public Form1()
         {
             InitializeComponent();
-            generalChars = new List<string>();
             fileNameWithPath = "";
             fileNameWithoutPath = "";
-            paths = new List<string>();
-            for (int i = 0; i < 20; i++)
-            {
-                //paths.Add("D:\\Major & Interests\\Github Repositories & My Projects\\Multimedia-Project-2018\\DataSet\\DataSet_" + (i + 1).ToString() + ".tsv");
-                //paths.Add("C:\\Multimedia-Project-2018\\DataSet\\DataSet_" + (i + 1).ToString() + ".tsv");
-                //paths.Add("D:\\Newfolder\\Multimedia-Project-2018\\DataSet\\DataSet_" + (i + 1).ToString() + ".tsv");
-                paths.Add("D:\\Computer department\\cairo university\\Assembly game\\Multimedia-Project-2018\\DataSet\\DataSet_" + (i + 1).ToString() + ".tsv");
-
-            }
             allCharsDict = new Dictionary<char, int>();
             uniqueCharSet = "";
-            init(allCharsDict);
-            EncodedText = "";
+            init();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -63,7 +49,7 @@ namespace multimedia
         {
         }
 
-        private void init(Dictionary<char, int> chars)
+        private void init()
         {
             FileStream file = new FileStream("all Unique Chars.txt", FileMode.Open, FileAccess.Read);
             StreamReader sr = new StreamReader(file, Encoding.UTF8);
@@ -144,8 +130,7 @@ namespace multimedia
 
         private void Process(string text)
         {
-            EncodedText = Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(text));
-            string uniqueChars = String.Join("", EncodedText.Distinct());
+            string uniqueChars = String.Join("", text.Distinct());
 
             foreach (char ch in uniqueChars)
             {

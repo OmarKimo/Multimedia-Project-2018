@@ -15,24 +15,16 @@ namespace multimedia
     {
         private string fileNameWithPath;
         private string fileNameWithoutPath;
-        private IList<string> paths;
+        private string uniqueCharSet;
         private Dictionary<char, int> allCharsDict;
         public Form1()
         {
             InitializeComponent();
             fileNameWithPath = "";
             fileNameWithoutPath = "";
-            paths = new List<string>();
-            for (int i = 0; i < 20; i++)
-            {
-                //paths.Add("D:\\Major & Interests\\Github Repositories & My Projects\\Multimedia-Project-2018\\DataSet\\DataSet_" + (i + 1).ToString() + ".tsv");
-                //paths.Add("C:\\Multimedia-Project-2018\\DataSet\\DataSet_" + (i + 1).ToString() + ".tsv");
-                //paths.Add("D:\\Newfolder\\Multimedia-Project-2018\\DataSet\\DataSet_" + (i + 1).ToString() + ".tsv");
-                paths.Add("D:\\Computer department\\cairo university\\Assembly game\\Multimedia-Project-2018\\DataSet\\DataSet_" + (i + 1).ToString() + ".tsv");
-
-            }
             allCharsDict = new Dictionary<char, int>();
-            init(allCharsDict);
+            uniqueCharSet = "";
+            init();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -57,26 +49,19 @@ namespace multimedia
         {
         }
 
-        private void init(Dictionary<char, int> chars)
+        private void init()
         {
-            string txt = "";
-            for (int i = 0; i < 20; i++)
-            {
-                FileStream fr = new FileStream(paths[i], FileMode.Open, FileAccess.Read);
-                StreamReader sr = new StreamReader(fr);
-                txt += sr.ReadToEnd();
-                txt = String.Join("", txt.Distinct());
-                sr.Close();
-                fr.Close();
-            }
-            FileStream file = new FileStream("all Unique Chars.txt", FileMode.Create);
-            StreamWriter of = new StreamWriter(file);
-            of.Write(txt);
-            foreach (char ch in txt)
+            FileStream file = new FileStream("all Unique Chars.txt", FileMode.Open, FileAccess.Read);
+            StreamReader sr = new StreamReader(file, Encoding.UTF8);
+
+            uniqueCharSet = sr.ReadToEnd();
+
+            foreach (char ch in uniqueCharSet)
             {
                 allCharsDict.Add(ch, 0);
             }
-            of.Close();
+
+            sr.Close();
             file.Close();
         }
 
