@@ -1,3 +1,0 @@
-which contains:
-o For each text file, number of bits in the compressed binary file and compression ratio of each.
-o Total number of bits in all compressed files and total compression ratio.

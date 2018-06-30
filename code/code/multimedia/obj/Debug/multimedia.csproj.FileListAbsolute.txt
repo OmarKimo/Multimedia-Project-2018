@@ -37,3 +37,4 @@ D:\Major & Interests\Github Repositories & My Projects\Multimedia-Project-2018\c
 D:\Major & Interests\Github Repositories & My Projects\Multimedia-Project-2018\code\code\multimedia\obj\Debug\multimedia.csproj.GenerateResource.Cache
 D:\Major & Interests\Github Repositories & My Projects\Multimedia-Project-2018\code\code\multimedia\obj\Debug\multimedia.exe
 D:\Major & Interests\Github Repositories & My Projects\Multimedia-Project-2018\code\code\multimedia\obj\Debug\multimedia.pdb
+D:\Computer department\cairo university\Assembly game\Multimedia-Project-2018\code\code\multimedia\bin\Debug\multimedia.exe.config

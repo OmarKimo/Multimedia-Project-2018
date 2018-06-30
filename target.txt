@@ -1,5 +1,0 @@
-Huffman Coding done
-Extended Huffman Coding done
-Integer Arithmetic Coding done 
-Dictionary coding
-Lempel-Ziv algorithm **
