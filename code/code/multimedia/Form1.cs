@@ -75,6 +75,7 @@ namespace multimedia
                     return;
                 }
 
+
                 FileStream fr = new FileStream(fileNameWithPath, FileMode.Open, FileAccess.Read);
                 StreamReader sr = new StreamReader(fr, Encoding.UTF8);
 

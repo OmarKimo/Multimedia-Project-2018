@@ -43,6 +43,7 @@ namespace multimedia
         {
             try
             {
+                
                 OpenFileDialog od = new OpenFileDialog();
                 od.ShowDialog();
                 od.InitialDirectory = Directory.GetCurrentDirectory();
