@@ -19,3 +19,6 @@ D:\Computer department\cairo university\Assembly game\Multimedia-Project-2018\mu
 D:\Major & Interests\Github Repositories & My Projects\Multimedia-Project-2018\multimedia\multimedia\obj\Debug\multimedia.Form2.resources
 D:\Computer department\cairo university\Assembly game\Multimedia-Project-2018\multimedia\multimedia\obj\Debug\multimedia.Form2.resources
 D:\Computer department\cairo university\Assembly game\Multimedia-Project-2018\multimedia\multimedia\obj\Debug\multimedia.csprojResolveAssemblyReference.cache
+D:\Major & Interests\MyProjects\Multimedia-Project-2018\multimedia\multimedia\bin\Debug\multimedia.exe.config
+D:\Major & Interests\MyProjects\Multimedia-Project-2018\multimedia\multimedia\obj\Debug\multimedia.exe
+D:\Major & Interests\MyProjects\Multimedia-Project-2018\multimedia\multimedia\obj\Debug\multimedia.pdb
