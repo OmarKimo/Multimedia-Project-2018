@@ -31,8 +31,8 @@ namespace multimedia
                 //paths.Add("D:\\Major & Interests\\Github Repositories & My Projects\\Multimedia-Project-2018\\DataSet\\DataSet_" + (i + 1).ToString() + ".tsv");
                 //paths.Add("C:\\Multimedia-Project-2018\\DataSet\\DataSet_" + (i + 1).ToString() + ".tsv");
                 //paths.Add("D:\\Newfolder\\Multimedia-Project-2018\\DataSet\\DataSet_" + (i + 1).ToString() + ".tsv");
-                paths.Add("D:\\Computer department\\cairo university\\Assembly game\\Multimedia-Project-2018\\DataSet\\DataSet_" + (i + 1).ToString() + ".tsv");
-
+                //paths.Add("D:\\Computer department\\cairo university\\Assembly game\\Multimedia-Project-2018\\DataSet\\DataSet_" + (i + 1).ToString() + ".tsv");
+                paths.Add("../../../../DataSet/DataSet_" + (i + 1).ToString() + ".tsv");
             }
             allCharsDict = new Dictionary<char, int>();
             init(allCharsDict);
@@ -45,9 +45,9 @@ namespace multimedia
             {
                 
                 OpenFileDialog od = new OpenFileDialog();
-                od.ShowDialog();
-                od.InitialDirectory = Directory.GetCurrentDirectory();
+                od.InitialDirectory = "../../../../DataSet"; // Directory.GetCurrentDirectory();
                 od.RestoreDirectory = true;
+                od.ShowDialog();
                 fileNameWithPath = od.FileName;
                 fileNameWithoutPath = fileNameWithPath.Split('\\').Last();
                 NameOfFile.Text = fileNameWithoutPath;
